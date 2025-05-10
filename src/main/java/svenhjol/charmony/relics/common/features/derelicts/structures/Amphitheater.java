@@ -7,6 +7,7 @@ import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
 import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SculkShriekerBlock;
 import net.minecraft.world.level.block.entity.BrushableBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
@@ -117,7 +118,8 @@ public class Amphitheater extends DerelictPiece {
         // Create the base slab.
         var width = (maxX - minX);
         generateSingleSlab(level, box, minX + 17, minY, minZ + 17, width, 0);
-        generateDangerSculk(level, box, minX + 17, minY, minZ + 17, minX + 17 + width, minY, minZ + 17 + width);
+        generateSusBlocks(level, box, minX + 17, minY, minZ + 17, maxX - 17, minY, maxZ - 17);
+        generateDangerSculk(level, box, minX + 17, minY, minZ + 17, maxX - 17, minY, maxZ - 17);
     }
 
     protected void generateCornerPillars(WorldGenLevel level, BoundingBox box, int wallOffset, int height, int width) {
@@ -135,7 +137,7 @@ public class Amphitheater extends DerelictPiece {
 
     protected void generateSingleSlab(WorldGenLevel level, BoundingBox box, int x, int y, int z, int width, int height) {
         generateBox(level, box, x, y, z, x + width, y + height, z + width, false, random, stepBlocks);
-        generateSusBlocks(level, box, x, y, z, x + width, y + height, x + width);
+//        generateSusBlocks(level, box, x, y, z, x + width, y + height, z + width);
     }
 
     protected void generateMirroredSteps(WorldGenLevel level, BoundingBox box, int wallOffset, int height, int width) {
@@ -161,13 +163,13 @@ public class Amphitheater extends DerelictPiece {
     }
 
     protected void generateSusBlocks(WorldGenLevel level, BoundingBox box, int x1, int y1, int z1, int x2, int y2, int z2) {
-        for (var tries = 0; tries < 10; tries++) {
+        for (var tries = 0; tries < 8; tries++) {
             var x = x1 + random.nextInt(Math.max(1, x2 - x1));
             var y = y1 + random.nextInt(Math.max(1, y2 - y1));
             var z = z1 + random.nextInt(Math.max(1, z2 - z1));
             var pos = getWorldPos(x, y, z);
 
-            if (random.nextFloat() < 0.2f) {
+            if (random.nextFloat() < 0.5f) {
                 placeBlock(level, Blocks.GRAVEL.defaultBlockState(), x, y, z, box);
                 continue;
             }
@@ -182,7 +184,7 @@ public class Amphitheater extends DerelictPiece {
     }
 
     protected void generateDangerSculk(WorldGenLevel level, BoundingBox box, int x1, int y1, int z1, int x2, int y2, int z2) {
-        for (var tries = 0; tries < 20; tries++) {
+        for (var tries = 0; tries < 4; tries++) {
             var x = x1 + random.nextInt(Math.max(1, x2 - x1));
             var y = y1 + random.nextInt(Math.max(1, y2 - y1));
             var z = z1 + random.nextInt(Math.max(1, z2 - z1));
@@ -192,14 +194,17 @@ public class Amphitheater extends DerelictPiece {
                 continue;
             }
 
-                placeBlock(level, Blocks.MAGENTA_WOOL.defaultBlockState(), x, y + 1, z, box);
-//                if (random.nextBoolean()) {
-//                    var shrieker = Blocks.SCULK_SHRIEKER.defaultBlockState().setValue(SculkShriekerBlock.CAN_SUMMON, true);
-//                    placeBlock(level, shrieker, x, y + 1, z, box);
-//                } else {
-//                    var catalyst = Blocks.SCULK_CATALYST.defaultBlockState();
-//                    placeBlock(level, catalyst, x, y, z, box);
-//                }
+            if (box.isInside(pos)) {
+//                                placeBlock(level, Blocks.MAGENTA_WOOL.defaultBlockState(), x, y + 1, z, box);
+
+                if (random.nextBoolean()) {
+                    var shrieker = Blocks.SCULK_SHRIEKER.defaultBlockState().setValue(SculkShriekerBlock.CAN_SUMMON, true);
+                    placeBlock(level, shrieker, x, y + 1, z, box);
+                } else {
+                    var catalyst = Blocks.SCULK_CATALYST.defaultBlockState();
+                    placeBlock(level, catalyst, x, y, z, box);
+                }
+            }
         }
     }
 
