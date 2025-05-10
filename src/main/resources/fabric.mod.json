@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "charmony-relics",
+  "version": "${mod_version}",
+
+  "name": "Relics",
+  "description": "Relics.",
+  "authors": [
+    "svenhjol"
+  ],
+  "icon": "assets/charmony-relics/textures/gui/sprites/icon.png",
+  "license": "MIT",
+  "environment": "*",
+  "mixins": [
+    "charmony-relics.client.mixins.json",
+    "charmony-relics.common.mixins.json"
+  ],
+  "accessWidener": "charmony-relics.accesswidener",
+
+  "entrypoints": {
+    "main": [
+      "svenhjol.charmony.relics.common.CommonInitializer"
+    ],
+    "client": [
+      "svenhjol.charmony.relics.client.ClientInitializer"
+    ]
+  },
+
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "minecraft": "*",
+    "java": ">=21",
+    "fabric-api": "*",
+    "charmony": ">=${charmony_version}",
+    "charmony-api": ">=${api_version}"
+  },
+
+  "contact": {
+    "homepage": "https://charmony.dev/mods/${mod_id}",
+    "sources": "https://github.com/svenhjol/${mod_id}"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "pack": {
+    "description": "Relics resources",
+    "pack_format": ${pack_version}
+  }
+}

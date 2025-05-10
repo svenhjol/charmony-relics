@@ -1,0 +1,8 @@
+{
+  "type": "charmony-relics:derelict",
+  "biomes": "#charmony-relics:has_structure/derelicts",
+  "spawn_overrides": {},
+  "derelict_definition": "amphitheater",
+  "step": "underground_structures",
+  "terrain_adaptation": "bury"
+}

@@ -1,0 +1,18 @@
+{
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 1511322,
+    "separation": 80,
+    "spacing": 100,
+    "exclusion_zone": {
+      "chunk_count": 10,
+      "other_set": "minecraft:ancient_cities"
+    }
+  },
+  "structures": [
+    {
+      "structure": "charmony-relics:derelict_amphitheater",
+      "weight": 1
+    }
+  ]
+}
