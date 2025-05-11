@@ -1,6 +1,7 @@
 package svenhjol.charmony.relics.common.features.derelicts.structures;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
@@ -154,25 +155,25 @@ public class Amphitheater extends DerelictPiece {
         generateBox(level, box, minX + width, minY, minZ, maxX - width, topLevel, minZ + width, false, random, stepBlocks);
         generateSusBlocks(level, box, minX + width, topLevel, minZ, maxX - width, topLevel, minZ + width);
         if (tryChest) {
-            generatedChest = tryGenerateChest(level, box, minX + width, topLevel, minZ, maxX - width, topLevel, minZ + width);
+            generatedChest = tryGenerateChest(level, box, minX + width, topLevel, minZ, maxX - width, topLevel, minZ + width, Direction.SOUTH);
         }
 
         generateBox(level, box, minX + width, minY, maxZ - width, maxX - width, topLevel, maxZ, false, random, stepBlocks);
         generateSusBlocks(level, box, minX + width, topLevel, maxZ - width, maxX - width, topLevel, maxZ);
         if (tryChest && !generatedChest) {
-            generatedChest = tryGenerateChest(level, box, minX + width, topLevel, maxZ - width, maxX - width, topLevel, maxZ);
+            generatedChest = tryGenerateChest(level, box, minX + width, topLevel, maxZ - width, maxX - width, topLevel, maxZ, Direction.NORTH);
         }
 
         generateBox(level, box, minX, minY, minZ + width, minX + width, topLevel, maxZ - width, false, random, stepBlocks);
         generateSusBlocks(level, box, minX, topLevel, minZ + width, minX + width, topLevel, maxZ - width);
         if (tryChest && !generatedChest) {
-            generatedChest = tryGenerateChest(level, box, minX, topLevel, minZ + width, minX + width, topLevel, maxZ - width);
+            generatedChest = tryGenerateChest(level, box, minX, topLevel, minZ + width, minX + width, topLevel, maxZ - width, Direction.EAST);
         }
 
         generateBox(level, box, maxX - width, minY, minZ + width, maxX, topLevel, maxZ - width, false, random, stepBlocks);
         generateSusBlocks(level, box, maxX - width, topLevel, minZ + width, maxX, topLevel, maxZ - width);
         if (tryChest && !generatedChest) {
-            tryGenerateChest(level, box, maxX - width, topLevel, minZ + width, maxX, topLevel, maxZ - width);
+            tryGenerateChest(level, box, maxX - width, topLevel, minZ + width, maxX, topLevel, maxZ - width, Direction.WEST);
         }
     }
 
@@ -197,18 +198,28 @@ public class Amphitheater extends DerelictPiece {
         }
     }
 
-    protected boolean tryGenerateChest(WorldGenLevel level, BoundingBox box, int x1, int y1, int z1, int x2, int y2, int z2) {
+    protected boolean tryGenerateChest(WorldGenLevel level, BoundingBox box, int x1, int y1, int z1, int x2, int y2, int z2, Direction facing) {
         var x = x1 + random.nextInt(Math.max(1, x2 - x1));
         var y = y1 + random.nextInt(Math.max(1, y2 - y1));
         var z = z1 + random.nextInt(Math.max(1, z2 - z1));
         var pos = getWorldPos(x, y + 1, z);
+        var generateDebugBase = false;
 
-        if (random.nextFloat() < 0.5f) {
+        if (random.nextFloat() < 0.1f) {
             return false;
         }
 
         if (box.isInside(pos)) {
-            return SecretChestApi.instance().createChest(SecretChestDefinitionProviders.DERELICT, level, random, pos, false);
+            //noinspection ConstantValue
+            if (generateDebugBase) {
+                switch (facing) {
+                    case NORTH -> placeBlock(level, Blocks.LIGHT_BLUE_WOOL.defaultBlockState(), x, y, z, box);
+                    case SOUTH -> placeBlock(level, Blocks.WHITE_WOOL.defaultBlockState(), x, y, z, box);
+                    case EAST -> placeBlock(level, Blocks.ORANGE_WOOL.defaultBlockState(), x, y, z, box);
+                    case WEST -> placeBlock(level, Blocks.MAGENTA_WOOL.defaultBlockState(), x, y, z, box);
+                }
+            }
+            return SecretChestApi.instance().createChest(SecretChestDefinitionProviders.DERELICT, level, random, pos, false, facing);
         }
 
         return false;
