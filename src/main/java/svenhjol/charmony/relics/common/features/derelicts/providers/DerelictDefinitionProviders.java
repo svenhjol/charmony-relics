@@ -1,18 +1,20 @@
-package svenhjol.charmony.relics.common.features.derelicts;
+package svenhjol.charmony.relics.common.features.derelicts.providers;
 
 import svenhjol.charmony.api.Api;
 import svenhjol.charmony.api.DerelictDefinition;
 import svenhjol.charmony.api.DerelictDefinitionProvider;
 import svenhjol.charmony.core.base.Setup;
+import svenhjol.charmony.relics.common.features.derelicts.Derelicts;
 
 import java.util.List;
 
-public class Providers extends Setup<Derelicts> implements DerelictDefinitionProvider {
-    public Providers(Derelicts feature) {
+public class DerelictDefinitionProviders extends Setup<Derelicts> implements DerelictDefinitionProvider {
+    public static final String AMPHITHEATER = "amphitheater";
+
+    public DerelictDefinitionProviders(Derelicts feature) {
         super(feature);
         Api.registerProvider(this);
     }
-
 
     @Override
     public List<DerelictDefinition> getDerelictDefinitions() {
@@ -20,7 +22,7 @@ public class Providers extends Setup<Derelicts> implements DerelictDefinitionPro
             new DerelictDefinition() {
                 @Override
                 public String name() {
-                    return "amphitheater";
+                    return AMPHITHEATER;
                 }
             }
         );

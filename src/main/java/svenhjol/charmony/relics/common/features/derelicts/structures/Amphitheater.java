@@ -15,8 +15,10 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import svenhjol.charmony.api.DerelictDefinition;
+import svenhjol.charmony.api.SecretChestApi;
 import svenhjol.charmony.relics.common.features.derelicts.Constants;
 import svenhjol.charmony.relics.common.features.derelicts.DerelictPiece;
+import svenhjol.charmony.relics.common.features.derelicts.providers.SecretChestDefinitionProviders;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -96,15 +98,15 @@ public class Amphitheater extends DerelictPiece {
         // Create main pillar walkways
         airDecay = 0f;
         sculkDecay = 0.0f;
-        generateMirroredSteps(level, box, 0, 5, 10);
+        generateMirroredSteps(level, box, 0, 5, 10, false);
 
         // Create steps leading down into the pit
         airDecay = 0.0005f;
         sculkDecay = 0.01f;
-        generateMirroredSteps(level, box, 8, 4, 4);
-        generateMirroredSteps(level, box, 10, 3, 4);
-        generateMirroredSteps(level, box, 12, 2, 4);
-        generateMirroredSteps(level, box, 14, 1, 4);
+        generateMirroredSteps(level, box, 10, 4, 2, true);
+        generateMirroredSteps(level, box, 12, 3, 2, true);
+        generateMirroredSteps(level, box, 14, 2, 2, false);
+        generateMirroredSteps(level, box, 16, 1, 2, false);
 
         // Create supporting pillars
         airDecay = 0.01f;
@@ -137,10 +139,9 @@ public class Amphitheater extends DerelictPiece {
 
     protected void generateSingleSlab(WorldGenLevel level, BoundingBox box, int x, int y, int z, int width, int height) {
         generateBox(level, box, x, y, z, x + width, y + height, z + width, false, random, stepBlocks);
-//        generateSusBlocks(level, box, x, y, z, x + width, y + height, z + width);
     }
 
-    protected void generateMirroredSteps(WorldGenLevel level, BoundingBox box, int wallOffset, int height, int width) {
+    protected void generateMirroredSteps(WorldGenLevel level, BoundingBox box, int wallOffset, int height, int width, boolean tryChest) {
         var minX = boundingBox.minX() + wallOffset;
         var minY = boundingBox.minY();
         var minZ = boundingBox.minZ() + wallOffset;
@@ -148,18 +149,31 @@ public class Amphitheater extends DerelictPiece {
         var maxZ = boundingBox.maxZ() - wallOffset;
 
         var topLevel = minY + height;
+        var generatedChest = false;
 
         generateBox(level, box, minX + width, minY, minZ, maxX - width, topLevel, minZ + width, false, random, stepBlocks);
         generateSusBlocks(level, box, minX + width, topLevel, minZ, maxX - width, topLevel, minZ + width);
+        if (tryChest) {
+            generatedChest = tryGenerateChest(level, box, minX + width, topLevel, minZ, maxX - width, topLevel, minZ + width);
+        }
 
         generateBox(level, box, minX + width, minY, maxZ - width, maxX - width, topLevel, maxZ, false, random, stepBlocks);
         generateSusBlocks(level, box, minX + width, topLevel, maxZ - width, maxX - width, topLevel, maxZ);
+        if (tryChest && !generatedChest) {
+            generatedChest = tryGenerateChest(level, box, minX + width, topLevel, maxZ - width, maxX - width, topLevel, maxZ);
+        }
 
         generateBox(level, box, minX, minY, minZ + width, minX + width, topLevel, maxZ - width, false, random, stepBlocks);
         generateSusBlocks(level, box, minX, topLevel, minZ + width, minX + width, topLevel, maxZ - width);
+        if (tryChest && !generatedChest) {
+            generatedChest = tryGenerateChest(level, box, minX, topLevel, minZ + width, minX + width, topLevel, maxZ - width);
+        }
 
         generateBox(level, box, maxX - width, minY, minZ + width, maxX, topLevel, maxZ - width, false, random, stepBlocks);
         generateSusBlocks(level, box, maxX - width, topLevel, minZ + width, maxX, topLevel, maxZ - width);
+        if (tryChest && !generatedChest) {
+            tryGenerateChest(level, box, maxX - width, topLevel, minZ + width, maxX, topLevel, maxZ - width);
+        }
     }
 
     protected void generateSusBlocks(WorldGenLevel level, BoundingBox box, int x1, int y1, int z1, int x2, int y2, int z2) {
@@ -183,6 +197,23 @@ public class Amphitheater extends DerelictPiece {
         }
     }
 
+    protected boolean tryGenerateChest(WorldGenLevel level, BoundingBox box, int x1, int y1, int z1, int x2, int y2, int z2) {
+        var x = x1 + random.nextInt(Math.max(1, x2 - x1));
+        var y = y1 + random.nextInt(Math.max(1, y2 - y1));
+        var z = z1 + random.nextInt(Math.max(1, z2 - z1));
+        var pos = getWorldPos(x, y + 1, z);
+
+        if (random.nextFloat() < 0.5f) {
+            return false;
+        }
+
+        if (box.isInside(pos)) {
+            return SecretChestApi.instance().createChest(SecretChestDefinitionProviders.DERELICT, level, random, pos, false);
+        }
+
+        return false;
+    }
+
     protected void generateDangerSculk(WorldGenLevel level, BoundingBox box, int x1, int y1, int z1, int x2, int y2, int z2) {
         for (var tries = 0; tries < 4; tries++) {
             var x = x1 + random.nextInt(Math.max(1, x2 - x1));
@@ -195,12 +226,15 @@ public class Amphitheater extends DerelictPiece {
             }
 
             if (box.isInside(pos)) {
-                if (random.nextBoolean()) {
+                if (random.nextFloat() < 0.5f) {
                     var shrieker = Blocks.SCULK_SHRIEKER.defaultBlockState().setValue(SculkShriekerBlock.CAN_SUMMON, true);
                     placeBlock(level, shrieker, x, y + 1, z, box);
-                } else {
+                } else if (random.nextFloat() < 0.4f){
                     var catalyst = Blocks.SCULK_CATALYST.defaultBlockState();
                     placeBlock(level, catalyst, x, y, z, box);
+                } else {
+                    var sensor = Blocks.SCULK_SENSOR.defaultBlockState();
+                    placeBlock(level, sensor, x, y + 1, z, box);
                 }
             }
         }
