@@ -10,6 +10,7 @@ import svenhjol.charmony.core.enums.Side;
 public final class Relics extends SidedFeature {
     public final Registers registers;
     public final Providers providers;
+    public final Handlers handlers;
 
     @Configurable(
         name = "Maximum additional levels",
@@ -22,6 +23,7 @@ public final class Relics extends SidedFeature {
         super(mod);
         registers = new Registers(this);
         providers = new Providers(this);
+        handlers = new Handlers(this);
     }
 
     public static Relics feature() {
