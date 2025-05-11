@@ -4,10 +4,10 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import net.minecraft.world.level.storage.loot.LootTable;
 import svenhjol.charmony.api.Api;
-import svenhjol.charmony.api.SecretChestDefinition;
-import svenhjol.charmony.api.SecretChestDefinitionProvider;
-import svenhjol.charmony.api.SecretChestPlacement;
 import svenhjol.charmony.api.materials.StoneChestMaterial;
+import svenhjol.charmony.api.secret_chests.SecretChestDefinition;
+import svenhjol.charmony.api.secret_chests.SecretChestDefinitionProvider;
+import svenhjol.charmony.api.secret_chests.SecretChestPlacement;
 import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.relics.common.features.derelicts.Derelicts;
 

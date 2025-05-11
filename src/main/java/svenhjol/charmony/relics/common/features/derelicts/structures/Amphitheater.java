@@ -16,7 +16,7 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import svenhjol.charmony.api.DerelictDefinition;
-import svenhjol.charmony.api.SecretChestApi;
+import svenhjol.charmony.api.secret_chests.SecretChestsApi;
 import svenhjol.charmony.relics.common.features.derelicts.Constants;
 import svenhjol.charmony.relics.common.features.derelicts.DerelictPiece;
 import svenhjol.charmony.relics.common.features.derelicts.providers.SecretChestDefinitionProviders;
@@ -219,7 +219,7 @@ public class Amphitheater extends DerelictPiece {
                     case WEST -> placeBlock(level, Blocks.MAGENTA_WOOL.defaultBlockState(), x, y, z, box);
                 }
             }
-            return SecretChestApi.instance().createChest(SecretChestDefinitionProviders.DERELICT, level, random, pos, false, facing);
+            return SecretChestsApi.instance().createChest(SecretChestDefinitionProviders.DERELICT, level, random, pos, false, facing);
         }
 
         return false;
