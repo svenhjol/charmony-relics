@@ -195,8 +195,6 @@ public class Amphitheater extends DerelictPiece {
             }
 
             if (box.isInside(pos)) {
-//                                placeBlock(level, Blocks.MAGENTA_WOOL.defaultBlockState(), x, y + 1, z, box);
-
                 if (random.nextBoolean()) {
                     var shrieker = Blocks.SCULK_SHRIEKER.defaultBlockState().setValue(SculkShriekerBlock.CAN_SUMMON, true);
                     placeBlock(level, shrieker, x, y + 1, z, box);
