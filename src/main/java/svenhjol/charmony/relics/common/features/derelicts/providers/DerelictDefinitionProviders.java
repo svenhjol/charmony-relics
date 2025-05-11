@@ -1,8 +1,8 @@
 package svenhjol.charmony.relics.common.features.derelicts.providers;
 
 import svenhjol.charmony.api.Api;
-import svenhjol.charmony.api.DerelictDefinition;
-import svenhjol.charmony.api.DerelictDefinitionProvider;
+import svenhjol.charmony.api.derelicts.DerelictDefinition;
+import svenhjol.charmony.api.derelicts.DerelictDefinitionProvider;
 import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.relics.common.features.derelicts.Derelicts;
 

@@ -8,7 +8,8 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.Structure;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePiecesBuilder;
-import svenhjol.charmony.api.DerelictDefinition;
+import svenhjol.charmony.api.derelicts.DerelictDefinition;
+import svenhjol.charmony.relics.common.features.derelicts.providers.DerelictDefinitionProviders;
 import svenhjol.charmony.relics.common.features.derelicts.structures.Amphitheater;
 
 import java.util.Optional;
@@ -52,10 +53,16 @@ public class DerelictStructure extends Structure {
         var height = -55 + (random.nextInt(6) * 2);
 
         var box = new BoundingBox(x, y, z, x + width, height, z + width);
-        var room = new Amphitheater(definition, 0, random, box);
-        builder.addPiece(room);
 
-        return true;
+        switch (definition.name()) {
+            case DerelictDefinitionProviders.AMPHITHEATER: {
+                builder.addPiece(new Amphitheater(definition, 0, random, box));
+                return true;
+            }
+            default: {
+                return false;
+            }
+        }
     }
 
     @Override

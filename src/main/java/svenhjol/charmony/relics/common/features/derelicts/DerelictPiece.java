@@ -5,7 +5,7 @@ import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.StructurePiece;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
-import svenhjol.charmony.api.DerelictDefinition;
+import svenhjol.charmony.api.derelicts.DerelictDefinition;
 
 public abstract class DerelictPiece extends StructurePiece {
     protected DerelictDefinition definition;

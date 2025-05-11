@@ -1,23 +1,34 @@
 package svenhjol.charmony.relics.common.features.derelicts;
 
 import com.mojang.serialization.Codec;
+import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
+import net.fabricmc.fabric.api.loot.v3.LootTableSource;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
-import svenhjol.charmony.api.DerelictDefinition;
-import svenhjol.charmony.api.DerelictDefinitionProvider;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import svenhjol.charmony.api.derelicts.DerelictDefinition;
+import svenhjol.charmony.api.derelicts.DerelictDefinitionProvider;
+import svenhjol.charmony.api.relics.RelicsApi;
 import svenhjol.charmony.core.Api;
 import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.core.common.CommonRegistry;
 import svenhjol.charmony.relics.common.features.derelicts.structures.Amphitheater;
 import svenhjol.charmony.relics.common.features.derelicts.structures.PillarRoom;
+import svenhjol.charmony.relics.common.features.relics.RelicLootFunction;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
 public class Registers extends Setup<Derelicts> {
-
     public final Supplier<StructureType<DerelictStructure>> structureType;
     public Codec<DerelictDefinition> structureCodec;
     public final Map<String, Supplier<StructurePieceType>> pieceTypes = new HashMap<>();
@@ -42,5 +53,27 @@ public class Registers extends Setup<Derelicts> {
             structureCodec = StringRepresentable.fromValues(
                 () -> definitions.values().toArray(new DerelictDefinition[0]));
         });
+    }
+
+    @Override
+    public Runnable boot() {
+        return () -> {
+            LootTableEvents.MODIFY.register(this::handleLootTableModify);
+        };
+    }
+
+    private void handleLootTableModify(ResourceKey<LootTable> key, LootTable.Builder builder, LootTableSource source, HolderLookup.Provider provider) {
+        if (source.isBuiltin() && key == Tags.LOOT_DIAMONDS) {
+            var random = RandomSource.create();
+            var relic = RelicsApi.instance().randomRelic(provider, random);
+
+            var pool = LootPool.lootPool()
+                .setRolls(ConstantValue.exactly(1))
+                .add(LootItem.lootTableItem(relic.getItem())
+                    .setWeight(1)
+                    .apply(() -> new RelicLootFunction(List.of(), relic)));
+
+            builder.pool(pool.build());
+        }
     }
 }

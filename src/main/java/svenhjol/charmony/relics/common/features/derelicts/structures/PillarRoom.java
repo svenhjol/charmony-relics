@@ -10,7 +10,7 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
-import svenhjol.charmony.api.DerelictDefinition;
+import svenhjol.charmony.api.derelicts.DerelictDefinition;
 import svenhjol.charmony.relics.common.features.derelicts.Constants;
 import svenhjol.charmony.relics.common.features.derelicts.DerelictPiece;
 
