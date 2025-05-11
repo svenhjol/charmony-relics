@@ -38,6 +38,11 @@ public class SecretChestDefinitionProviders extends Setup<Derelicts> implements 
         }
 
         @Override
+        public int difficultyAmplifier() {
+            return 3;
+        }
+
+        @Override
         public List<String> lockMenus() {
             return List.of(
                 "moon_puzzle"
