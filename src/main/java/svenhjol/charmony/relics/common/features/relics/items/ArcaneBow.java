@@ -3,6 +3,7 @@ package svenhjol.charmony.relics.common.features.relics.items;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
@@ -31,6 +32,11 @@ public class ArcaneBow implements RelicDefinition {
     @Override
     public RelicType type() {
         return RelicType.Weapon;
+    }
+
+    @Override
+    public int numberOfEnchantments(RandomSource random) {
+        return 2;
     }
 
     @Override

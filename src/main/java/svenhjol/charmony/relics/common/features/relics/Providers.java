@@ -5,6 +5,7 @@ import svenhjol.charmony.api.relics.RelicDefinition;
 import svenhjol.charmony.api.relics.RelicDefinitionProvider;
 import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.relics.common.features.relics.items.ArcaneBow;
+import svenhjol.charmony.relics.common.features.relics.items.EnchantedBook;
 
 import java.util.List;
 
@@ -17,7 +18,8 @@ public class Providers extends Setup<Relics> implements RelicDefinitionProvider 
     @Override
     public List<RelicDefinition> getRelicDefinitions() {
         return List.of(
-            new ArcaneBow()
+            new ArcaneBow(),
+            new EnchantedBook()
         );
     }
 }

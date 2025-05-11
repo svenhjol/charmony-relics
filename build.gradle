@@ -12,4 +12,5 @@ apply from: buildFile.exists() ? buildFile : buildUrl
 // Add local dependencies here.
 dependencies {
     copyMod "charmony-stone-chests", "stone_chests"
+    copyMod "charmony-glint-colors", "glint_colors"
 }

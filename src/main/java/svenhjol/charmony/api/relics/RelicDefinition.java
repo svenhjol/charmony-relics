@@ -1,5 +1,6 @@
 package svenhjol.charmony.api.relics;
 
+import net.minecraft.Util;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
@@ -16,6 +17,7 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import svenhjol.charmony.api.glint_colors.GlintColorsApi;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -46,7 +48,14 @@ public interface RelicDefinition extends StringRepresentable {
      * Additional levels above the enchantment maximum.
      */
     default int additionalLevels(RandomSource random) {
-        return 0;
+        return 1;
+    }
+
+    /**
+     * Number of enchantments to include from the fixed or valid list.
+     */
+    default int numberOfEnchantments(RandomSource random) {
+        return 1;
     }
 
     default DyeColor glintColor(RandomSource random) {
@@ -85,18 +94,33 @@ public interface RelicDefinition extends StringRepresentable {
         var itemEnchantments = new ItemEnchantments.Mutable(EnchantmentHelper.getEnchantmentsForCrafting(item));
 
         var fixed = fixedEnchantments();
-        for (var entry : fixed.entrySet()) {
-            var holder = registry.getOrThrow(entry.getKey());
-            itemEnchantments.set(holder, entry.getValue());
+        if (!fixed.isEmpty()) {
+            var max = Math.min(numberOfEnchantments(random), fixed.size());
+            var keys = new ArrayList<>(fixed.keySet());
+            Util.shuffle(keys, random);
+
+            for (var i = 0; i < max; i++) {
+                var key = keys.get(i);
+                var holder = registry.getOrThrow(key);
+                itemEnchantments.set(holder, fixed.get(key));
+            }
         }
 
-        var valid = validEnchantments();
-        for (var key : valid) {
-            var holder = registry.getOrThrow(key);
-            var additional = additionalLevels(random);
-            var max = holder.value().getMaxLevel();
-            var newMax = max + additional;
-            itemEnchantments.set(holder, newMax);
+        var valid = new ArrayList<>(validEnchantments());
+        if (!valid.isEmpty()) {
+            Util.shuffle(valid, random);
+            var max = numberOfEnchantments(random);
+            var keys = new ArrayList<>(valid);
+            Util.shuffle(keys, random);
+
+            for (var i = 0; i < max; i++) {
+                var key = keys.get(i);
+                var holder = registry.getOrThrow(key);
+                var additional = additionalLevels(random);
+                var maxLevel = holder.value().getMaxLevel();
+                var newMaxLevel = maxLevel + additional;
+                itemEnchantments.set(holder, newMaxLevel);
+            }
         }
 
         // Set the enchantments back onto the item.

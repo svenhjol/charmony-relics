@@ -4,6 +4,7 @@ import net.minecraft.Util;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
 import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import svenhjol.charmony.api.relics.RelicDefinition;
 import svenhjol.charmony.api.relics.RelicDefinitionProvider;
@@ -12,20 +13,37 @@ import svenhjol.charmony.api.relics.RelicsApi;
 import svenhjol.charmony.core.Api;
 import svenhjol.charmony.core.base.Registerable;
 import svenhjol.charmony.core.base.Setup;
+import svenhjol.charmony.relics.common.features.relics.loot_functions.*;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 public class Registers extends Setup<Relics> {
     public final Map<String, RelicDefinition> relicDefinitions = new HashMap<>();
     public final Map<RelicType, List<RelicDefinition>> relicsByType = new HashMap<>();
-    public final Supplier<LootItemFunctionType<RelicLootFunction>> relicLootFunction;
+    public final Map<String, Supplier<LootItemFunctionType<? extends LootItemConditionalFunction>>> lootFunctions = new HashMap<>();
 
     public Registers(Relics feature) {
         super(feature);
 
-        relicLootFunction = new Registerable<>(feature, () -> Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE,
-            feature.id("set_relic"), new LootItemFunctionType<>(RelicLootFunction.CODEC)));
+        // Loot functions for adding relics to loot tables.
+        lootFunctions.put(Constants.RELIC_LOOT, new Registerable<>(feature, () -> Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE,
+            feature.id(Constants.RELIC_LOOT), new LootItemFunctionType<>(RelicLootFunction.CODEC))));
+
+        lootFunctions.put(Constants.WEAPON_LOOT, new Registerable<>(feature, () -> Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE,
+            feature.id(Constants.WEAPON_LOOT), new LootItemFunctionType<>(WeaponLootFunction.CODEC))));
+
+        lootFunctions.put(Constants.TOOL_LOOT, new Registerable<>(feature, () -> Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE,
+            feature.id(Constants.TOOL_LOOT), new LootItemFunctionType<>(ToolLootFunction.CODEC))));
+
+        lootFunctions.put(Constants.ARMOR_LOOT, new Registerable<>(feature, () -> Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE,
+            feature.id(Constants.ARMOR_LOOT), new LootItemFunctionType<>(ArmorLootFunction.CODEC))));
+
+        lootFunctions.put(Constants.BOOK_LOOT, new Registerable<>(feature, () -> Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE,
+            feature.id(Constants.BOOK_LOOT), new LootItemFunctionType<>(BookLootFunction.CODEC))));
 
         Api.consume(RelicDefinitionProvider.class, provider -> {
             relicsByType.clear();
