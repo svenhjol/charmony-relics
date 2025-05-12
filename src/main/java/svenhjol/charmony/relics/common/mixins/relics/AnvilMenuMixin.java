@@ -36,9 +36,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
         }
 
         var inputStack = inputSlots.getItem(1);
-
-        var cost = this.cost.get();
-        var extraCost = Relics.feature().handlers.transferRelicEnchantments(inputStack, outputStack, enchantments);
-        this.cost.set(cost + extraCost);
+        var cost = Relics.feature().handlers.transferRelicEnchantments(inputStack, outputStack, enchantments, this.cost.get());
+        this.cost.set(cost);
     }
 }

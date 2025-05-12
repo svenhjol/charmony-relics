@@ -9,6 +9,8 @@ import java.util.function.BiFunction;
 
 @SuppressWarnings("unused")
 public final class RelicsApi {
+    public static final String RELIC_TAG = "charmony-relic";
+
     private static RelicsApi instance;
 
     private TriFunction<String, HolderGetter.Provider, RandomSource, ItemStack> relicImpl;

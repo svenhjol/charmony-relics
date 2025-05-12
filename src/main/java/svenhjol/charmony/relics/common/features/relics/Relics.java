@@ -19,6 +19,23 @@ public final class Relics extends SidedFeature {
     )
     private static int maxAdditionalLevels = 3;
 
+    @Configurable(
+        name = "Anvil cost per additional level",
+        description = """
+            The cost (in XP) of each level above the enchantment's maximum when applying on the anvil."""
+    )
+    private static int anvilCostPerLevel;
+
+    @Configurable(
+        name = "Maximum anvil cost",
+        description = """
+            Maximum cost when using an anvil to apply an enchanted book with levels above the default.
+            In the vanilla game, items cannot be given a cost greater than 39.
+            Some mods (including Charmony Tweaks) remove this upper limit, so if you are using such a mod
+            you can set the value to zero to ignore the maxmimum cost."""
+    )
+    private static int maxAnvilCost = 39;
+
     public Relics(Mod mod) {
         super(mod);
         registers = new Registers(this);
@@ -32,5 +49,13 @@ public final class Relics extends SidedFeature {
 
     public int maxAdditionalLevels() {
         return maxAdditionalLevels;
+    }
+
+    public int maxAnvilCost() {
+        return maxAnvilCost;
+    }
+
+    public int anvilCostPerLevel() {
+        return anvilCostPerLevel;
     }
 }

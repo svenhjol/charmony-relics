@@ -61,7 +61,7 @@ public class Registers extends Setup<Relics> {
             RelicsApi.instance().setRelicImpl((id, registry, random) -> {
                 var definition = relicDefinitions.getOrDefault(id, null);
                 if (definition == null) return ItemStack.EMPTY;
-                return definition.relicItem(registry, random);
+                return feature().handlers.relicItem(definition, registry, random);
             });
 
             // Implementation to get a random relic from the available pool.
@@ -71,7 +71,7 @@ public class Registers extends Setup<Relics> {
 
                 Util.shuffle(definitions, random);
                 var definition = definitions.getFirst();
-                return definition.relicItem(registry, random);
+                return feature().handlers.relicItem(definition, registry, random);
             });
 
             // Implementation to get a random relic of a given type.
@@ -81,7 +81,7 @@ public class Registers extends Setup<Relics> {
 
                 Util.shuffle(definitions, random);
                 var definition = definitions.getFirst();
-                return definition.relicItem(registry, random);
+                return feature().handlers.relicItem(definition, registry, random);
             });
         };
     }
