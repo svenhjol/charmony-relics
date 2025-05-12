@@ -1,8 +1,11 @@
 package svenhjol.charmony.relics.common.features.derelicts.structures;
 
+import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
@@ -10,6 +13,8 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SculkShriekerBlock;
 import net.minecraft.world.level.block.entity.BrushableBlockEntity;
+import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
+import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -17,10 +22,13 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSeriali
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import svenhjol.charmony.api.derelicts.DerelictDefinition;
 import svenhjol.charmony.api.secret_chests.SecretChestsApi;
+import svenhjol.charmony.core.helpers.TagHelper;
 import svenhjol.charmony.relics.common.features.derelicts.Constants;
 import svenhjol.charmony.relics.common.features.derelicts.DerelictPiece;
+import svenhjol.charmony.relics.common.features.derelicts.WrappedDecoratedPot;
 import svenhjol.charmony.relics.common.features.derelicts.providers.SecretChestDefinitionProviders;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -99,15 +107,15 @@ public class Amphitheater extends DerelictPiece {
         // Create main pillar walkways
         airDecay = 0f;
         sculkDecay = 0.0f;
-        generateMirroredSteps(level, box, 0, 5, 10, false);
+        generateMirroredSteps(level, box, 0, 5, 10, 8, 4, false);
 
         // Create steps leading down into the pit
         airDecay = 0.0005f;
         sculkDecay = 0.01f;
-        generateMirroredSteps(level, box, 10, 4, 2, true);
-        generateMirroredSteps(level, box, 12, 3, 2, true);
-        generateMirroredSteps(level, box, 14, 2, 2, false);
-        generateMirroredSteps(level, box, 16, 1, 2, false);
+        generateMirroredSteps(level, box, 10, 4, 2, 0, 4, false);
+        generateMirroredSteps(level, box, 12, 3, 2, 1, 2, true);
+        generateMirroredSteps(level, box, 14, 2, 2, 2, 0, true);
+        generateMirroredSteps(level, box, 16, 1, 2, 3, 0, false);
 
         // Create supporting pillars
         airDecay = 0.01f;
@@ -121,7 +129,7 @@ public class Amphitheater extends DerelictPiece {
         // Create the base slab.
         var width = (maxX - minX);
         generateSingleSlab(level, box, minX + 17, minY, minZ + 17, width, 0);
-        generateSusBlocks(level, box, minX + 17, minY, minZ + 17, maxX - 17, minY, maxZ - 17);
+        tryGenerateBrushables(level, box, minX + 17, minY, minZ + 17, maxX - 17, minY, maxZ - 17, 12);
         generateDangerSculk(level, box, minX + 17, minY, minZ + 17, maxX - 17, minY, maxZ - 17);
     }
 
@@ -142,7 +150,7 @@ public class Amphitheater extends DerelictPiece {
         generateBox(level, box, x, y, z, x + width, y + height, z + width, false, random, stepBlocks);
     }
 
-    protected void generateMirroredSteps(WorldGenLevel level, BoundingBox box, int wallOffset, int height, int width, boolean tryChest) {
+    protected void generateMirroredSteps(WorldGenLevel level, BoundingBox box, int wallOffset, int height, int width, int maxBrushables, int maxPots, boolean withChest) {
         var minX = boundingBox.minX() + wallOffset;
         var minY = boundingBox.minY();
         var minZ = boundingBox.minZ() + wallOffset;
@@ -153,32 +161,52 @@ public class Amphitheater extends DerelictPiece {
         var generatedChest = false;
 
         generateBox(level, box, minX + width, minY, minZ, maxX - width, topLevel, minZ + width, false, random, stepBlocks);
-        generateSusBlocks(level, box, minX + width, topLevel, minZ, maxX - width, topLevel, minZ + width);
-        if (tryChest) {
+        if (maxBrushables > 0) {
+            tryGenerateBrushables(level, box, minX + width, topLevel, minZ, maxX - width, topLevel, minZ + width, maxBrushables);
+        }
+        if (maxPots > 0) {
+            tryGeneratePots(level, box, minX + width, topLevel, minZ, maxX - width, topLevel, minZ + width, maxPots);
+        }
+        if (withChest) {
             generatedChest = tryGenerateChest(level, box, minX + width, topLevel, minZ, maxX - width, topLevel, minZ + width, Direction.SOUTH);
         }
 
         generateBox(level, box, minX + width, minY, maxZ - width, maxX - width, topLevel, maxZ, false, random, stepBlocks);
-        generateSusBlocks(level, box, minX + width, topLevel, maxZ - width, maxX - width, topLevel, maxZ);
-        if (tryChest && !generatedChest) {
+        if (maxBrushables > 0) {
+            tryGenerateBrushables(level, box, minX + width, topLevel, maxZ - width, maxX - width, topLevel, maxZ, maxBrushables);
+        }
+        if (maxPots > 0) {
+            tryGeneratePots(level, box, minX + width, topLevel, maxZ - width, maxX - width, topLevel, maxZ, maxPots);
+        }
+        if (withChest && !generatedChest) {
             generatedChest = tryGenerateChest(level, box, minX + width, topLevel, maxZ - width, maxX - width, topLevel, maxZ, Direction.NORTH);
         }
 
         generateBox(level, box, minX, minY, minZ + width, minX + width, topLevel, maxZ - width, false, random, stepBlocks);
-        generateSusBlocks(level, box, minX, topLevel, minZ + width, minX + width, topLevel, maxZ - width);
-        if (tryChest && !generatedChest) {
+        if (maxBrushables > 0) {
+            tryGenerateBrushables(level, box, minX, topLevel, minZ + width, minX + width, topLevel, maxZ - width, maxBrushables);
+        }
+        if (maxPots > 0) {
+            tryGeneratePots(level, box, minX, topLevel, minZ + width, minX + width, topLevel, maxZ - width, maxPots);
+        }
+        if (withChest && !generatedChest) {
             generatedChest = tryGenerateChest(level, box, minX, topLevel, minZ + width, minX + width, topLevel, maxZ - width, Direction.EAST);
         }
 
         generateBox(level, box, maxX - width, minY, minZ + width, maxX, topLevel, maxZ - width, false, random, stepBlocks);
-        generateSusBlocks(level, box, maxX - width, topLevel, minZ + width, maxX, topLevel, maxZ - width);
-        if (tryChest && !generatedChest) {
+        if (maxBrushables > 0) {
+            tryGenerateBrushables(level, box, maxX - width, topLevel, minZ + width, maxX, topLevel, maxZ - width, maxBrushables);
+        }
+        if (maxPots > 0) {
+            tryGeneratePots(level, box, maxX - width, topLevel, minZ + width, maxX, topLevel, maxZ - width, maxPots);
+        }
+        if (withChest && !generatedChest) {
             tryGenerateChest(level, box, maxX - width, topLevel, minZ + width, maxX, topLevel, maxZ - width, Direction.WEST);
         }
     }
 
-    protected void generateSusBlocks(WorldGenLevel level, BoundingBox box, int x1, int y1, int z1, int x2, int y2, int z2) {
-        for (var tries = 0; tries < 8; tries++) {
+    protected void tryGenerateBrushables(WorldGenLevel level, BoundingBox box, int x1, int y1, int z1, int x2, int y2, int z2, int tries) {
+        for (var i = 0; i < tries; i++) {
             var x = x1 + random.nextInt(Math.max(1, x2 - x1));
             var y = y1 + random.nextInt(Math.max(1, y2 - y1));
             var z = z1 + random.nextInt(Math.max(1, z2 - z1));
@@ -189,10 +217,40 @@ public class Amphitheater extends DerelictPiece {
                 continue;
             }
 
-            if (box.isInside(pos)) {
+            if (box.isInside(pos) && level.getBlockState(pos.below()).isSolidRender()) {
                 level.setBlock(pos, Blocks.SUSPICIOUS_GRAVEL.defaultBlockState(), 2);
                 if (level.getBlockEntity(pos) instanceof BrushableBlockEntity brushable) {
                     brushable.setLootTable(BuiltInLootTables.DESERT_PYRAMID_ARCHAEOLOGY, random.nextLong());
+                }
+            }
+        }
+    }
+
+    protected void tryGeneratePots(WorldGenLevel level, BoundingBox box, int x1, int y1, int z1, int x2, int y2, int z2, int tries) {
+        for (var i = 0; i < tries; i++) {
+            var x = x1 + random.nextInt(Math.max(1, x2 - x1));
+            var y = y1 + random.nextInt(Math.max(1, y2 - y1));
+            var z = z1 + random.nextInt(Math.max(1, z2 - z1));
+            var pos = getWorldPos(x, y + 1, z);
+            var state = level.getBlockState(pos);
+            var stateBelow = level.getBlockState(pos.below());
+
+            if (random.nextFloat() < 0.5f) {
+                continue;
+            }
+
+            if (box.isInside(pos) && state.isAir() && stateBelow.isSolidRender()) {
+                level.setBlock(pos, Blocks.DECORATED_POT.defaultBlockState(), 2);
+                if (level.getBlockEntity(pos) instanceof DecoratedPotBlockEntity pot) {
+                    PotDecorations decorations;
+                    var sherds = new ArrayList<>(TagHelper.getValues(level.registryAccess().lookupOrThrow(Registries.ITEM), ItemTags.DECORATED_POT_SHERDS));
+                    if (sherds.size() > 4) {
+                        Util.shuffle(sherds, random);
+                        decorations = new PotDecorations(sherds.subList(0, 4));
+                    } else {
+                        decorations = PotDecorations.EMPTY;
+                    }
+                    ((WrappedDecoratedPot)pot).setDecorations(decorations).setLootTable(BuiltInLootTables.DESERT_PYRAMID_ARCHAEOLOGY, random.nextLong());
                 }
             }
         }
@@ -203,7 +261,7 @@ public class Amphitheater extends DerelictPiece {
         var y = y1 + random.nextInt(Math.max(1, y2 - y1));
         var z = z1 + random.nextInt(Math.max(1, z2 - z1));
         var pos = getWorldPos(x, y + 1, z);
-        var generateDebugBase = false;
+        var debugGenerateBase = false;
 
         if (random.nextFloat() < 0.1f) {
             return false;
@@ -211,7 +269,7 @@ public class Amphitheater extends DerelictPiece {
 
         if (box.isInside(pos)) {
             //noinspection ConstantValue
-            if (generateDebugBase) {
+            if (debugGenerateBase) {
                 switch (facing) {
                     case NORTH -> placeBlock(level, Blocks.LIGHT_BLUE_WOOL.defaultBlockState(), x, y, z, box);
                     case SOUTH -> placeBlock(level, Blocks.WHITE_WOOL.defaultBlockState(), x, y, z, box);

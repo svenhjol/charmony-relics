@@ -50,7 +50,7 @@ public class DerelictStructure extends Structure {
         var z = chunkPos.getBlockZ(2);
 
         var width = 48 + (random.nextInt(8) * 2);
-        var height = -55 + (random.nextInt(6) * 2);
+        var height = -53 + (random.nextInt(6) * 2);
 
         var box = new BoundingBox(x, y, z, x + width, height, z + width);
 

@@ -1,1 +1,3 @@
 accessWidener v1 named
+accessible class net/minecraft/world/level/block/entity/PotDecorations
+accessible method net/minecraft/world/level/block/entity/PotDecorations <init> (Ljava/util/List;)V
