@@ -33,7 +33,7 @@ public class SecretChestDefinitionProviders extends Setup<Derelicts> implements 
         @Override
         public List<ResourceKey<LootTable>> lootTables() {
             return List.of(
-                Tags.LOOT_DIAMONDS
+                Tags.BOOKS_CHEST
             );
         }
 
@@ -45,7 +45,8 @@ public class SecretChestDefinitionProviders extends Setup<Derelicts> implements 
         @Override
         public List<String> lockMenus() {
             return List.of(
-                "moon_puzzle"
+                "moon_puzzle",
+                "clock_puzzle"
             );
         }
     };

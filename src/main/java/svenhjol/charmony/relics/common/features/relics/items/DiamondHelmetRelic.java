@@ -18,20 +18,20 @@ import svenhjol.charmony.relics.common.features.relics.Tags;
 
 import java.util.List;
 
-public class DiamondAxeRelic implements RelicDefinition {
+public class DiamondHelmetRelic implements RelicDefinition {
     @Override
     public String id() {
-        return "diamond_axe";
+        return "diamond_helmet";
     }
 
     @Override
     public MutableComponent name(RandomSource random) {
-        return Helpers.prefixedItemName(Component.translatable("item.minecraft.diamond_axe"), random);
+        return Helpers.prefixedItemName(Component.translatable("item.minecraft.diamond_helmet"), random);
     }
 
     @Override
     public ItemStack item(RandomSource random) {
-        return new ItemStack(Items.DIAMOND_AXE);
+        return new ItemStack(Items.DIAMOND_HELMET);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class DiamondAxeRelic implements RelicDefinition {
 
     @Override
     public RelicType type() {
-        return RelicType.Weapon;
+        return RelicType.Armor;
     }
 
     @Override
@@ -51,6 +51,6 @@ public class DiamondAxeRelic implements RelicDefinition {
 
     @Override
     public List<ResourceKey<Enchantment>> validEnchantments(HolderGetter.Provider provider) {
-        return TagHelper.getResourceKeys(provider.lookupOrThrow(Registries.ENCHANTMENT), Tags.ON_DIAMOND_AXE);
+        return TagHelper.getResourceKeys(provider.lookupOrThrow(Registries.ENCHANTMENT), Tags.ON_DIAMOND_HELMET);
     }
 }

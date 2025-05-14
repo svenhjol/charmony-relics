@@ -21,7 +21,7 @@ import java.util.List;
 public class DiamondPickaxeRelic implements RelicDefinition {
     @Override
     public String id() {
-        return "pickaxe_relic";
+        return "diamond_pickaxe";
     }
 
     @Override
@@ -51,6 +51,6 @@ public class DiamondPickaxeRelic implements RelicDefinition {
 
     @Override
     public List<ResourceKey<Enchantment>> validEnchantments(HolderGetter.Provider provider) {
-        return TagHelper.getResourceKeys(provider.lookupOrThrow(Registries.ENCHANTMENT), Tags.ON_DIAMOND_PICKAXES);
+        return TagHelper.getResourceKeys(provider.lookupOrThrow(Registries.ENCHANTMENT), Tags.ON_DIAMOND_PICKAXE);
     }
 }

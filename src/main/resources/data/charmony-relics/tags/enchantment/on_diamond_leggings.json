@@ -1,0 +1,11 @@
+{
+  "values": [
+    "minecraft:fire_protection",
+    "minecraft:projectile_protection",
+    "minecraft:blast_protection",
+    "minecraft:protection",
+    "minecraft:swift_sneak",
+    "minecraft:unbreaking",
+    "minecraft:thorns"
+  ]
+}

@@ -20,6 +20,7 @@ import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.core.common.CommonRegistry;
 import svenhjol.charmony.relics.common.features.derelicts.structures.Amphitheater;
 import svenhjol.charmony.relics.common.features.derelicts.structures.PillarRoom;
+import svenhjol.charmony.relics.common.features.relics.loot_functions.BookLootFunction;
 import svenhjol.charmony.relics.common.features.relics.loot_functions.RelicLootFunction;
 
 import java.util.HashMap;
@@ -62,7 +63,17 @@ public class Registers extends Setup<Derelicts> {
     }
 
     private void handleLootTableModify(ResourceKey<LootTable> key, LootTable.Builder builder, LootTableSource source, HolderLookup.Provider provider) {
-        if (source.isBuiltin() && key == Tags.LOOT_DIAMONDS) {
+        if (!source.isBuiltin()) return;
+        if (key == Tags.BOOKS_CHEST) {
+            var pool = LootPool.lootPool()
+                .setRolls(ConstantValue.exactly(1))
+                .add(LootItem.lootTableItem(Items.BOOK)
+                    .setWeight(1)
+                    .apply(() -> new BookLootFunction(List.of())));
+
+            builder.pool(pool.build());
+        }
+        if (key == Tags.RELICS) {
             var pool = LootPool.lootPool()
                 .setRolls(ConstantValue.exactly(1))
                 .add(LootItem.lootTableItem(Items.DIAMOND)

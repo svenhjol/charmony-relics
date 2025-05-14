@@ -14,11 +14,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSerializationContext;
-import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import svenhjol.charmony.api.derelicts.DerelictDefinition;
 import svenhjol.charmony.api.secret_chests.SecretChestsApi;
 import svenhjol.charmony.relics.common.features.derelicts.Constants;
 import svenhjol.charmony.relics.common.features.derelicts.DerelictPiece;
+import svenhjol.charmony.relics.common.features.derelicts.Tags;
 import svenhjol.charmony.relics.common.features.derelicts.providers.SecretChestDefinitionProviders;
 
 import java.util.LinkedHashMap;
@@ -281,7 +281,8 @@ public class Amphitheater extends DerelictPiece {
             if (box.isInside(pos) && level.getBlockState(pos.below()).isSolidRender()) {
                 level.setBlock(pos, Blocks.SUSPICIOUS_GRAVEL.defaultBlockState(), 2);
                 if (level.getBlockEntity(pos) instanceof BrushableBlockEntity brushable) {
-                    brushable.setLootTable(BuiltInLootTables.DESERT_PYRAMID_ARCHAEOLOGY, random.nextLong());
+                    var loot = random.nextDouble() < 0.18d ? Tags.RELICS : Tags.DERELICT_ARCHAEOLOGY;
+                    brushable.setLootTable(loot, random.nextLong());
                 }
             }
         }
@@ -301,7 +302,7 @@ public class Amphitheater extends DerelictPiece {
             }
 
             if (box.isInside(pos) && state.isAir() && stateBelow.isSolidRender()) {
-                feature().handlers.createDecoratedPot(level, pos, random, BuiltInLootTables.DESERT_PYRAMID_ARCHAEOLOGY);
+                feature().handlers.createDecoratedPot(level, pos, random, random.nextDouble() < 0.8d ? Tags.RELICS : Tags.DERELICT_POTS);
             }
         }
     }

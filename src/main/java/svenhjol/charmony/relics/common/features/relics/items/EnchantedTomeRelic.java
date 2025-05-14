@@ -61,6 +61,6 @@ public class EnchantedTomeRelic implements RelicDefinition {
 
     @Override
     public List<ResourceKey<Enchantment>> validEnchantments(HolderGetter.Provider provider) {
-        return TagHelper.getResourceKeys(provider.lookupOrThrow(Registries.ENCHANTMENT), Tags.ON_ENCHANTED_TOMES);
+        return TagHelper.getResourceKeys(provider.lookupOrThrow(Registries.ENCHANTMENT), Tags.ON_ENCHANTED_TOME);
     }
 }

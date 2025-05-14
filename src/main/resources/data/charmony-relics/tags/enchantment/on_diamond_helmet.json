@@ -1,0 +1,12 @@
+{
+  "values": [
+    "minecraft:fire_protection",
+    "minecraft:projectile_protection",
+    "minecraft:blast_protection",
+    "minecraft:protection",
+    "minecraft:thorns",
+    "minecraft:respiration",
+    "minecraft:unbreaking",
+    "minecraft:aqua_affinity"
+  ]
+}

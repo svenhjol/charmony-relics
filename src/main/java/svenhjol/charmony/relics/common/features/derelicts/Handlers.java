@@ -42,7 +42,7 @@ public class Handlers extends Setup<Derelicts> {
             } else {
                 decorations = PotDecorations.EMPTY;
             }
-            ((WrappedDecoratedPot)pot).setDecorations(decorations).setLootTable(lootTable, random.nextLong());
+            ((WrappedPot)pot).setDecorations(decorations).setLootTable(lootTable, random.nextLong());
         }
     }
 }
