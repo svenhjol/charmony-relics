@@ -18,6 +18,7 @@ public abstract class DecoratedPotBlockEntityMixin extends BlockEntity implement
         super(blockEntityType, blockPos, blockState);
     }
 
+    @SuppressWarnings("AddedMixinMembersNamePattern")
     @Override
     public DecoratedPotBlockEntity setDecorations(PotDecorations decorations) {
         this.decorations = decorations;

@@ -1,11 +1,8 @@
 package svenhjol.charmony.relics.common.features.derelicts.structures;
 
-import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.tags.ItemTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.StructureManager;
@@ -13,8 +10,6 @@ import net.minecraft.world.level.WorldGenLevel;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SculkShriekerBlock;
 import net.minecraft.world.level.block.entity.BrushableBlockEntity;
-import net.minecraft.world.level.block.entity.DecoratedPotBlockEntity;
-import net.minecraft.world.level.block.entity.PotDecorations;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.ChunkGenerator;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
@@ -22,13 +17,10 @@ import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceSeriali
 import net.minecraft.world.level.storage.loot.BuiltInLootTables;
 import svenhjol.charmony.api.derelicts.DerelictDefinition;
 import svenhjol.charmony.api.secret_chests.SecretChestsApi;
-import svenhjol.charmony.core.helpers.TagHelper;
 import svenhjol.charmony.relics.common.features.derelicts.Constants;
 import svenhjol.charmony.relics.common.features.derelicts.DerelictPiece;
-import svenhjol.charmony.relics.common.features.derelicts.WrappedDecoratedPot;
 import svenhjol.charmony.relics.common.features.derelicts.providers.SecretChestDefinitionProviders;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -240,18 +232,7 @@ public class Amphitheater extends DerelictPiece {
             }
 
             if (box.isInside(pos) && state.isAir() && stateBelow.isSolidRender()) {
-                level.setBlock(pos, Blocks.DECORATED_POT.defaultBlockState(), 2);
-                if (level.getBlockEntity(pos) instanceof DecoratedPotBlockEntity pot) {
-                    PotDecorations decorations;
-                    var sherds = new ArrayList<>(TagHelper.getValues(level.registryAccess().lookupOrThrow(Registries.ITEM), ItemTags.DECORATED_POT_SHERDS));
-                    if (sherds.size() > 4) {
-                        Util.shuffle(sherds, random);
-                        decorations = new PotDecorations(sherds.subList(0, 4));
-                    } else {
-                        decorations = PotDecorations.EMPTY;
-                    }
-                    ((WrappedDecoratedPot)pot).setDecorations(decorations).setLootTable(BuiltInLootTables.DESERT_PYRAMID_ARCHAEOLOGY, random.nextLong());
-                }
+                feature().handlers.createDecoratedPot(level, pos, random, BuiltInLootTables.DESERT_PYRAMID_ARCHAEOLOGY);
             }
         }
     }
