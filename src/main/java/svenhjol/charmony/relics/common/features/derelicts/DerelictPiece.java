@@ -17,7 +17,7 @@ public abstract class DerelictPiece extends StructurePiece {
 
     public DerelictPiece(StructurePieceType type, CompoundTag tag) {
         super(type, tag);
-        this.definition = feature().registers.definitions.get(tag.getStringOr(Constants.DEFINITION_TAG, "simple"));
+        this.definition = feature().registers.definitions.get(tag.getStringOr(Constants.DEFINITION_TAG, "amphitheater"));
     }
 
     @Override

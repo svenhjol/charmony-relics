@@ -2,29 +2,24 @@ package svenhjol.charmony.relics.common.features.derelicts;
 
 import com.mojang.serialization.Codec;
 import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
-import net.fabricmc.fabric.api.loot.v3.LootTableSource;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.resources.ResourceKey;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.levelgen.structure.StructureType;
 import net.minecraft.world.level.levelgen.structure.pieces.StructurePieceType;
-import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import svenhjol.charmony.api.derelicts.DerelictDefinition;
 import svenhjol.charmony.api.derelicts.DerelictDefinitionProvider;
 import svenhjol.charmony.core.Api;
+import svenhjol.charmony.core.base.Registerable;
 import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.core.common.CommonRegistry;
+import svenhjol.charmony.relics.common.features.derelicts.loot_functions.*;
 import svenhjol.charmony.relics.common.features.derelicts.structures.Amphitheater;
 import svenhjol.charmony.relics.common.features.derelicts.structures.PillarRoom;
-import svenhjol.charmony.relics.common.features.relics.loot_functions.BookLootFunction;
-import svenhjol.charmony.relics.common.features.relics.loot_functions.RelicLootFunction;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
 
@@ -33,6 +28,7 @@ public class Registers extends Setup<Derelicts> {
     public Codec<DerelictDefinition> structureCodec;
     public final Map<String, Supplier<StructurePieceType>> pieceTypes = new HashMap<>();
     public final Map<String, DerelictDefinition> definitions = new HashMap<>();
+    public final Map<String, Supplier<LootItemFunctionType<? extends LootItemConditionalFunction>>> lootFunctions = new HashMap<>();
 
     public Registers(Derelicts feature) {
         super(feature);
@@ -44,6 +40,25 @@ public class Registers extends Setup<Derelicts> {
             registry.structurePiece(Constants.PILLAR_ROOM, () -> PillarRoom::new));
         pieceTypes.put(Constants.AMPHITHEATER,
             registry.structurePiece(Constants.AMPHITHEATER, () -> Amphitheater::new));
+
+        lootFunctions.put(Constants.MAP_LOOT, new Registerable<>(feature, () -> Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE,
+            feature.id(Constants.MAP_LOOT), new LootItemFunctionType<>(DerelictMapFunction.CODEC))));
+
+        // Loot functions for adding relics to loot tables.
+        lootFunctions.put(Constants.RELIC_LOOT, new Registerable<>(feature, () -> Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE,
+            feature.id(Constants.RELIC_LOOT), new LootItemFunctionType<>(RelicLootFunction.CODEC))));
+
+        lootFunctions.put(Constants.WEAPON_LOOT, new Registerable<>(feature, () -> Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE,
+            feature.id(Constants.WEAPON_LOOT), new LootItemFunctionType<>(WeaponLootFunction.CODEC))));
+
+        lootFunctions.put(Constants.TOOL_LOOT, new Registerable<>(feature, () -> Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE,
+            feature.id(Constants.TOOL_LOOT), new LootItemFunctionType<>(ToolLootFunction.CODEC))));
+
+        lootFunctions.put(Constants.ARMOR_LOOT, new Registerable<>(feature, () -> Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE,
+            feature.id(Constants.ARMOR_LOOT), new LootItemFunctionType<>(ArmorLootFunction.CODEC))));
+
+        lootFunctions.put(Constants.BOOK_LOOT, new Registerable<>(feature, () -> Registry.register(BuiltInRegistries.LOOT_FUNCTION_TYPE,
+            feature.id(Constants.BOOK_LOOT), new LootItemFunctionType<>(BookLootFunction.CODEC))));
 
         Api.consume(DerelictDefinitionProvider.class, provider -> {
             for (var def : provider.getDerelictDefinitions()) {
@@ -58,29 +73,7 @@ public class Registers extends Setup<Derelicts> {
     @Override
     public Runnable boot() {
         return () -> {
-            LootTableEvents.MODIFY.register(this::handleLootTableModify);
+            LootTableEvents.MODIFY.register(feature().handlers::handleLootTableModify);
         };
-    }
-
-    private void handleLootTableModify(ResourceKey<LootTable> key, LootTable.Builder builder, LootTableSource source, HolderLookup.Provider provider) {
-        if (!source.isBuiltin()) return;
-        if (key == Tags.BOOKS_CHEST) {
-            var pool = LootPool.lootPool()
-                .setRolls(ConstantValue.exactly(1))
-                .add(LootItem.lootTableItem(Items.BOOK)
-                    .setWeight(1)
-                    .apply(() -> new BookLootFunction(List.of())));
-
-            builder.pool(pool.build());
-        }
-        if (key == Tags.RELICS) {
-            var pool = LootPool.lootPool()
-                .setRolls(ConstantValue.exactly(1))
-                .add(LootItem.lootTableItem(Items.DIAMOND)
-                    .setWeight(1)
-                    .apply(() -> new RelicLootFunction(List.of())));
-
-            builder.pool(pool.build());
-        }
     }
 }

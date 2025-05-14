@@ -55,7 +55,7 @@ public class Handlers extends Setup<Relics> {
         return cost;
     }
 
-    public ItemStack relicItem(RelicDefinition definition, HolderGetter.Provider provider, RandomSource random) {
+    public ItemStack createRelicItem(RelicDefinition definition, HolderGetter.Provider provider, RandomSource random) {
         var registry = provider.lookupOrThrow(Registries.ENCHANTMENT);
 
         // Get the base itemstack of the relic.

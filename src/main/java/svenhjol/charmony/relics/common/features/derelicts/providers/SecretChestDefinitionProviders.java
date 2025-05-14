@@ -2,18 +2,15 @@ package svenhjol.charmony.relics.common.features.derelicts.providers;
 
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.level.storage.loot.LootTable;
-import svenhjol.charmony.api.Api;
 import svenhjol.charmony.api.secret_chests.SecretChestDefinition;
 import svenhjol.charmony.api.secret_chests.SecretChestDefinitionProvider;
 import svenhjol.charmony.api.secret_chests.SecretChestPlacement;
 import svenhjol.charmony.api.stone_chests.StoneChestMaterial;
-import svenhjol.charmony.core.base.Setup;
-import svenhjol.charmony.relics.common.features.derelicts.Derelicts;
 import svenhjol.charmony.relics.common.features.derelicts.Tags;
 
 import java.util.List;
 
-public class SecretChestDefinitionProviders extends Setup<Derelicts> implements SecretChestDefinitionProvider {
+public class SecretChestDefinitionProviders implements SecretChestDefinitionProvider {
     public static final SecretChestDefinition DERELICT = new SecretChestDefinition() {
         @Override
         public String name() {
@@ -50,11 +47,6 @@ public class SecretChestDefinitionProviders extends Setup<Derelicts> implements 
             );
         }
     };
-
-    public SecretChestDefinitionProviders(Derelicts feature) {
-        super(feature);
-        Api.registerProvider(this);
-    }
 
     @Override
     public List<SecretChestDefinition> getSecretChestDefinitions() {
