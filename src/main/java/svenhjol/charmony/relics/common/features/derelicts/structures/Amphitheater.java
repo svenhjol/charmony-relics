@@ -59,20 +59,20 @@ public class Amphitheater extends DerelictPiece {
         stepBlockMap.put(Blocks.CRACKED_DEEPSLATE_BRICKS.defaultBlockState(), 0.6f);
         stepBlockMap.put(Blocks.GRAVEL.defaultBlockState(), 0.4f);
         stepBlockMap.put(Blocks.DEEPSLATE_TILES.defaultBlockState(), 0.4f);
-        stepBlockMap.put(Blocks.COBBLED_DEEPSLATE.defaultBlockState(), 0.9f);
+        stepBlockMap.put(Blocks.COBBLED_DEEPSLATE.defaultBlockState(), 1.0f);
 
         pillarBlockMap.put(Blocks.DEEPSLATE_BRICKS.defaultBlockState(), 0.64f);
         pillarBlockMap.put(Blocks.CRACKED_DEEPSLATE_BRICKS.defaultBlockState(), 0.7f);
-        pillarBlockMap.put(Blocks.DEEPSLATE_TILES.defaultBlockState(), 0.9f);
+        pillarBlockMap.put(Blocks.DEEPSLATE_TILES.defaultBlockState(), 0.84f);
         pillarBlockMap.put(Blocks.GRAVEL.defaultBlockState(), 0.1f);
-        pillarBlockMap.put(Blocks.COBBLED_DEEPSLATE.defaultBlockState(), 0.96f);
+        pillarBlockMap.put(Blocks.COBBLED_DEEPSLATE.defaultBlockState(), 1.0f);
 ;
         wallBlockMap.put(Blocks.DEEPSLATE_TILES.defaultBlockState(), 0.5f);
         wallBlockMap.put(Blocks.CRACKED_DEEPSLATE_TILES.defaultBlockState(), 0.5f);
         wallBlockMap.put(Blocks.DEEPSLATE_BRICKS.defaultBlockState(), 0.75f);
         wallBlockMap.put(Blocks.CRACKED_DEEPSLATE_BRICKS.defaultBlockState(), 0.75f);
-        wallBlockMap.put(Blocks.COBBLED_DEEPSLATE.defaultBlockState(), 0.96f);
-        wallBlockMap.put(Blocks.GRAVEL.defaultBlockState(), 0.1f);
+        wallBlockMap.put(Blocks.COBBLED_DEEPSLATE.defaultBlockState(), 0.8f);
+        wallBlockMap.put(Blocks.GRAVEL.defaultBlockState(), 1.0f);
 
         sculkBlockMap.put(Blocks.SCULK.defaultBlockState(), 0.85f);
         sculkBlockMap.put(Blocks.SCULK_CATALYST.defaultBlockState(), 0.05f);
