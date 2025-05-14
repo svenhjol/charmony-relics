@@ -108,12 +108,12 @@ public class Amphitheater extends DerelictPiece {
         generateCornerPillars(level, box, 0, 12, pillarHeight);
 
         // Generate slabs on top of the pillars
-        airDecay = 0.01f;
-        sculkDecay = 0.12f;
-        generateSingleSlab(level, box, minX, minY + pillarHeight, minZ, 12, 2);
-        generateSingleSlab(level, box, maxX - 12, minY + pillarHeight, minZ, 12, 2);
-        generateSingleSlab(level, box, minX, minY + pillarHeight, maxZ - 12, 12, 2);
-        generateSingleSlab(level, box, maxX - 12, minY + pillarHeight, maxZ - 12, 12, 2);
+        airDecay = 0.02f;
+        sculkDecay = 0.22f;
+        generateSingleSlab(level, box, minX, minY + pillarHeight - 3, minZ, 12, 2);
+        generateSingleSlab(level, box, maxX - 12, minY + pillarHeight - 3, minZ, 12, 2);
+        generateSingleSlab(level, box, minX, minY + pillarHeight - 3, maxZ - 12, 12, 2);
+        generateSingleSlab(level, box, maxX - 12, minY + pillarHeight - 3, maxZ - 12, 12, 2);
 
         // Create main pillar walkways and wall shelves
         airDecay = 0f;
@@ -150,12 +150,13 @@ public class Amphitheater extends DerelictPiece {
         var minY = boundingBox.minY();
         var minZ = boundingBox.minZ() + wallOffset;
         var maxX = boundingBox.maxX() - wallOffset;
+        var maxY = Math.min(boundingBox.maxY(), minY + height);
         var maxZ = boundingBox.maxZ() - wallOffset;
 
-        generateBox(level, box, minX, minY, minZ, minX + width, minY + height, minZ + width, false, random, pillarBlocks);
-        generateBox(level, box, maxX - width, minY, minZ, maxX, minY + height, minZ + width, false, random, pillarBlocks);
-        generateBox(level, box, minX, minY, maxZ - width, minX + width, minY + height, maxZ, false, random, pillarBlocks);
-        generateBox(level, box, maxX - width, minY, maxZ - width, maxX, minY + height, maxZ, false, random, pillarBlocks);
+        generateBox(level, box, minX, minY, minZ, minX + width, maxY, minZ + width, false, random, pillarBlocks);
+        generateBox(level, box, maxX - width, minY, minZ, maxX, maxY, minZ + width, false, random, pillarBlocks);
+        generateBox(level, box, minX, minY, maxZ - width, minX + width, maxY, maxZ, false, random, pillarBlocks);
+        generateBox(level, box, maxX - width, minY, maxZ - width, maxX, maxY, maxZ, false, random, pillarBlocks);
     }
 
     protected void generateMirroredWalls(WorldGenLevel level, BoundingBox box, int height) {
@@ -163,14 +164,15 @@ public class Amphitheater extends DerelictPiece {
         var minY = boundingBox.minY();
         var minZ = boundingBox.minZ();
         var maxX = boundingBox.maxX();
+        var maxY = Math.min(boundingBox.maxY(), minY + height);
         var maxZ = boundingBox.maxZ();
 
         var width = 1;
 
-        generateBox(level, box, minX, minY, minZ, minX + width, minY + height, maxZ, false, random, wallBlocks);
-        generateBox(level, box, minX, minY, minZ, maxX, minY + height, minZ + width, false, random, wallBlocks);
-        generateBox(level, box, minX, minY, maxZ - width, maxX, minY + height, maxZ, false, random, wallBlocks);
-        generateBox(level, box, maxX - width, minY, minZ, maxX, minY + height, maxZ, false, random, wallBlocks);
+        generateBox(level, box, minX, minY, minZ, minX + width, maxY, maxZ, false, random, wallBlocks);
+        generateBox(level, box, minX, minY, minZ, maxX, maxY, minZ + width, false, random, wallBlocks);
+        generateBox(level, box, minX, minY, maxZ - width, maxX, maxY, maxZ, false, random, wallBlocks);
+        generateBox(level, box, maxX - width, minY, minZ, maxX, maxY, maxZ, false, random, wallBlocks);
     }
 
     protected void generateMirroredShelves(WorldGenLevel level, BoundingBox box, int maxPots) {
