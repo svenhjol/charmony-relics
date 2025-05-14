@@ -59,12 +59,12 @@ public class Handlers extends Setup<Relics> {
         var registry = provider.lookupOrThrow(Registries.ENCHANTMENT);
 
         // Get the base itemstack of the relic.
-        var item = definition.item();
+        var item = definition.item(random);
 
         var numEnchantments = definition.numberOfEnchantments(random);
 
         // Set the translated custom name of the relic.
-        item.set(DataComponents.CUSTOM_NAME, definition.name());
+        item.set(DataComponents.CUSTOM_NAME, definition.name(random));
 
         // Get fixed/valid enchantments and apply them to the relic.
         var itemEnchantments = new ItemEnchantments.Mutable(EnchantmentHelper.getEnchantmentsForCrafting(item));

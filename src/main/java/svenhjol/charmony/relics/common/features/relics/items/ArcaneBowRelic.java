@@ -18,19 +18,19 @@ import java.util.Map;
 /**
  * A bow that allows the illegal combination of infinity and mending.
  */
-public class ArcaneBow implements RelicDefinition {
+public class ArcaneBowRelic implements RelicDefinition {
     @Override
     public String id() {
         return "arcane_bow";
     }
 
     @Override
-    public MutableComponent name() {
+    public MutableComponent name(RandomSource random) {
         return Component.translatable("item.charmony-relics.arcane_bow");
     }
 
     @Override
-    public ItemStack item() {
+    public ItemStack item(RandomSource random) {
         return new ItemStack(Items.BOW);
     }
 

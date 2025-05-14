@@ -25,12 +25,12 @@ public interface RelicDefinition extends StringRepresentable {
     /**
      * Translatable name for the relic.
      */
-    MutableComponent name();
+    MutableComponent name(RandomSource random);
 
     /**
      * Base itemstack for the relic.
      */
-    ItemStack item();
+    ItemStack item(RandomSource random);
 
     /**
      * Relic type. Can be used to sort relics into specific loot tables for example.
