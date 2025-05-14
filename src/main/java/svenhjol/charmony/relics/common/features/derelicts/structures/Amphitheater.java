@@ -32,8 +32,10 @@ public class Amphitheater extends DerelictPiece {
 
     private final Map<BlockState, Float> stepBlockMap = new LinkedHashMap<>();
     private final Map<BlockState, Float> pillarBlockMap = new LinkedHashMap<>();
+    private final Map<BlockState, Float> wallBlockMap = new LinkedHashMap<>();
     private final Map<BlockState, Float> sculkBlockMap = new LinkedHashMap<>();
 
+    private final WallBlockSelector wallBlocks = new WallBlockSelector();
     private final PillarBlockSelector pillarBlocks = new PillarBlockSelector();
     private final StepBlockSelector stepBlocks = new StepBlockSelector();
 
@@ -50,6 +52,7 @@ public class Amphitheater extends DerelictPiece {
     private void setupBlocks() {
         stepBlockMap.clear();
         pillarBlockMap.clear();
+        wallBlockMap.clear();
 
         stepBlockMap.put(Blocks.POLISHED_DEEPSLATE.defaultBlockState(), 0.7f);
         stepBlockMap.put(Blocks.DEEPSLATE_BRICKS.defaultBlockState(), 0.7f);
@@ -63,6 +66,13 @@ public class Amphitheater extends DerelictPiece {
         pillarBlockMap.put(Blocks.DEEPSLATE_TILES.defaultBlockState(), 0.9f);
         pillarBlockMap.put(Blocks.GRAVEL.defaultBlockState(), 0.1f);
         pillarBlockMap.put(Blocks.COBBLED_DEEPSLATE.defaultBlockState(), 0.96f);
+;
+        wallBlockMap.put(Blocks.DEEPSLATE_TILES.defaultBlockState(), 0.5f);
+        wallBlockMap.put(Blocks.CRACKED_DEEPSLATE_TILES.defaultBlockState(), 0.5f);
+        wallBlockMap.put(Blocks.DEEPSLATE_BRICKS.defaultBlockState(), 0.75f);
+        wallBlockMap.put(Blocks.CRACKED_DEEPSLATE_BRICKS.defaultBlockState(), 0.75f);
+        wallBlockMap.put(Blocks.COBBLED_DEEPSLATE.defaultBlockState(), 0.96f);
+        wallBlockMap.put(Blocks.GRAVEL.defaultBlockState(), 0.1f);
 
         sculkBlockMap.put(Blocks.SCULK.defaultBlockState(), 0.85f);
         sculkBlockMap.put(Blocks.SCULK_CATALYST.defaultBlockState(), 0.05f);
@@ -79,43 +89,53 @@ public class Amphitheater extends DerelictPiece {
         var maxY = boundingBox.maxY();
         var maxZ = boundingBox.maxZ();
 
-        // Clear everything above the base
-        generateUpperHalfSphere(level, box, minX, minY + 1, minZ, maxX, maxY, maxZ, CAVE_AIR, false);
+        // Clear everything we will generate in.
+        generateBox(level, box, minX, minY, minZ, maxX, minY + 10, maxZ, CAVE_AIR, CAVE_AIR, false);
+
+        // Make a dome above this space
+        generateUpperHalfSphere(level, box, minX, minY + 10, minZ, maxX, maxY, maxZ, CAVE_AIR, false);
+
+        // Create walls to prevent weird lava behavior
+        airDecay = 0f;
+        sculkDecay = 0.15f;
+        var wallHeight = maxY - minY + 2;
+        generateMirroredWalls(level, box, wallHeight);
 
         // Create main corner pillars
-        var pillarHeight = maxY - minY - 2;
         airDecay = 0f;
         sculkDecay = 0.05f;
-        generateCornerPillars(level, box, 0, pillarHeight, 12);
+        var pillarHeight = maxY - minY + 2;
+        generateCornerPillars(level, box, 0, 12, pillarHeight);
 
         // Generate slabs on top of the pillars
-        airDecay = 0.008f;
+        airDecay = 0.01f;
         sculkDecay = 0.12f;
-        generateSingleSlab(level, box, minX, pillarHeight, minZ, 12, 2);
-        generateSingleSlab(level, box, maxX - 12, pillarHeight, minZ, 12, 2);
-        generateSingleSlab(level, box, minX, pillarHeight, maxZ - 12, 12, 2);
-        generateSingleSlab(level, box, maxX - 12, pillarHeight + 1, maxZ - 12, 12, 2);
+        generateSingleSlab(level, box, minX, minY + pillarHeight, minZ, 12, 2);
+        generateSingleSlab(level, box, maxX - 12, minY + pillarHeight, minZ, 12, 2);
+        generateSingleSlab(level, box, minX, minY + pillarHeight, maxZ - 12, 12, 2);
+        generateSingleSlab(level, box, maxX - 12, minY + pillarHeight, maxZ - 12, 12, 2);
 
-        // Create main pillar walkways
+        // Create main pillar walkways and wall shelves
         airDecay = 0f;
         sculkDecay = 0.0f;
-        generateMirroredSteps(level, box, 0, 5, 10, 8, 4, false);
+        generateMirroredSteps(level, box, 0, 10, 5, 8, 4, false);
+        generateMirroredShelves(level, box, 7);
 
         // Create steps leading down into the pit
         airDecay = 0.0005f;
         sculkDecay = 0.01f;
-        generateMirroredSteps(level, box, 10, 4, 2, 0, 4, false);
-        generateMirroredSteps(level, box, 12, 3, 2, 1, 2, true);
+        generateMirroredSteps(level, box, 10, 2, 4, 0, 1, false);
+        generateMirroredSteps(level, box, 12, 2, 3, 1, 0, true);
         generateMirroredSteps(level, box, 14, 2, 2, 2, 0, true);
-        generateMirroredSteps(level, box, 16, 1, 2, 3, 0, false);
+        generateMirroredSteps(level, box, 16, 2, 1, 3, 0, false);
 
         // Create supporting pillars
         airDecay = 0.01f;
         sculkDecay = 0.0f;
-        generateCornerPillars(level, box, 11, 5, 1);
-        generateCornerPillars(level, box, 13, 4, 1);
-        generateCornerPillars(level, box, 15, 3, 1);
-        generateCornerPillars(level, box, 17, 2, 1);
+        generateCornerPillars(level, box, 11, 1, 5);
+        generateCornerPillars(level, box, 13, 1, 4);
+        generateCornerPillars(level, box, 15, 1, 3);
+        generateCornerPillars(level, box, 17, 1, 2);
         generateCornerPillars(level, box, 19, 1, 1);
 
         // Create the base slab.
@@ -125,24 +145,67 @@ public class Amphitheater extends DerelictPiece {
         generateDangerSculk(level, box, minX + 17, minY, minZ + 17, maxX - 17, minY, maxZ - 17);
     }
 
-    protected void generateCornerPillars(WorldGenLevel level, BoundingBox box, int wallOffset, int height, int width) {
+    protected void generateCornerPillars(WorldGenLevel level, BoundingBox box, int wallOffset, int width, int height) {
         var minX = boundingBox.minX() + wallOffset;
         var minY = boundingBox.minY();
         var minZ = boundingBox.minZ() + wallOffset;
         var maxX = boundingBox.maxX() - wallOffset;
         var maxZ = boundingBox.maxZ() - wallOffset;
 
-        generateBox(level, box, minX, minY + 1, minZ, minX + width, minY + height, minZ + width, false, random, pillarBlocks);
-        generateBox(level, box, maxX - width, minY + 1, minZ, maxX, minY + height, minZ + width, false, random, pillarBlocks);
-        generateBox(level, box, minX, minY + 1, maxZ - width, minX + width, minY + height, maxZ, false, random, pillarBlocks);
-        generateBox(level, box, maxX - width, minY + 1, maxZ - width, maxX, minY + height, maxZ, false, random, pillarBlocks);
+        generateBox(level, box, minX, minY, minZ, minX + width, minY + height, minZ + width, false, random, pillarBlocks);
+        generateBox(level, box, maxX - width, minY, minZ, maxX, minY + height, minZ + width, false, random, pillarBlocks);
+        generateBox(level, box, minX, minY, maxZ - width, minX + width, minY + height, maxZ, false, random, pillarBlocks);
+        generateBox(level, box, maxX - width, minY, maxZ - width, maxX, minY + height, maxZ, false, random, pillarBlocks);
     }
 
-    protected void generateSingleSlab(WorldGenLevel level, BoundingBox box, int x, int y, int z, int width, int height) {
-        generateBox(level, box, x, y, z, x + width, y + height, z + width, false, random, stepBlocks);
+    protected void generateMirroredWalls(WorldGenLevel level, BoundingBox box, int height) {
+        var minX = boundingBox.minX();
+        var minY = boundingBox.minY();
+        var minZ = boundingBox.minZ();
+        var maxX = boundingBox.maxX();
+        var maxZ = boundingBox.maxZ();
+
+        var width = 1;
+
+        generateBox(level, box, minX, minY, minZ, minX + width, minY + height, maxZ, false, random, wallBlocks);
+        generateBox(level, box, minX, minY, minZ, maxX, minY + height, minZ + width, false, random, wallBlocks);
+        generateBox(level, box, minX, minY, maxZ - width, maxX, minY + height, maxZ, false, random, wallBlocks);
+        generateBox(level, box, maxX - width, minY, minZ, maxX, minY + height, maxZ, false, random, wallBlocks);
     }
 
-    protected void generateMirroredSteps(WorldGenLevel level, BoundingBox box, int wallOffset, int height, int width, int maxBrushables, int maxPots, boolean withChest) {
+    protected void generateMirroredShelves(WorldGenLevel level, BoundingBox box, int maxPots) {
+        var minX = boundingBox.minX();
+        var minY = boundingBox.minY();
+        var minZ = boundingBox.minZ();
+        var maxX = boundingBox.maxX();
+        var maxZ = boundingBox.maxZ();
+
+        var width = 2;
+        var shelfY = minY + 8;
+
+        generateBox(level, box, minX + width, shelfY, minZ, minX + width, shelfY, maxZ, false, random, stepBlocks);
+        if (maxPots > 0) {
+            tryGeneratePots(level, box, minX + width, shelfY, minZ, minX + width, shelfY, maxZ, maxPots);
+        }
+
+        generateBox(level, box, minX, shelfY, minZ + width, maxX, shelfY, minZ + width, false, random, stepBlocks);
+        if (maxPots > 0) {
+            tryGeneratePots(level, box, minX, shelfY, minZ + width, maxX, shelfY, minZ + width, maxPots);
+        }
+
+        generateBox(level, box, minX, shelfY, maxZ - width, maxX, shelfY, maxZ - width, false, random, stepBlocks);
+        if (maxPots > 0) {
+            tryGeneratePots(level, box, minX, shelfY, maxZ - width, maxX, shelfY, maxZ - width, maxPots);
+        }
+
+        generateBox(level, box, maxX - width, shelfY, minZ, maxX + width, shelfY, maxZ, false, random, stepBlocks);
+        if (maxPots > 0) {
+            tryGeneratePots(level, box, maxX - width, shelfY, minZ, maxX + width, shelfY, maxZ, maxPots);
+        }
+
+    }
+
+    protected void generateMirroredSteps(WorldGenLevel level, BoundingBox box, int wallOffset, int width, int height, int maxBrushables, int maxPots, boolean withChest) {
         var minX = boundingBox.minX() + wallOffset;
         var minY = boundingBox.minY();
         var minZ = boundingBox.minZ() + wallOffset;
@@ -197,6 +260,10 @@ public class Amphitheater extends DerelictPiece {
         }
     }
 
+    protected void generateSingleSlab(WorldGenLevel level, BoundingBox box, int x, int y, int z, int width, int height) {
+        generateBox(level, box, x, y, z, x + width, y + height, z + width, false, random, stepBlocks);
+    }
+
     protected void tryGenerateBrushables(WorldGenLevel level, BoundingBox box, int x1, int y1, int z1, int x2, int y2, int z2, int tries) {
         for (var i = 0; i < tries; i++) {
             var x = x1 + random.nextInt(Math.max(1, x2 - x1));
@@ -227,7 +294,7 @@ public class Amphitheater extends DerelictPiece {
             var state = level.getBlockState(pos);
             var stateBelow = level.getBlockState(pos.below());
 
-            if (random.nextFloat() < 0.5f) {
+            if (random.nextFloat() < 0.12f) {
                 continue;
             }
 
@@ -306,18 +373,18 @@ public class Amphitheater extends DerelictPiece {
 
             return Optional.empty();
         }
-    }
 
-    protected class StepBlockSelector extends AmphitheaterBlockSelector {
+        public abstract Map<BlockState, Float> blockMap();
+
         @Override
-        public void next(RandomSource random, int x, int y, int z, boolean bl) {
+        public void next(RandomSource randomSource, int x, int y, int z, boolean bl) {
             var opt = tryDecay();
             if (opt.isPresent()) {
                 this.next = opt.get();
                 return;
             }
 
-            for (var entry : Amphitheater.this.stepBlockMap.entrySet()) {
+            for (var entry : blockMap().entrySet()) {
                 if (random.nextFloat() < entry.getValue()) {
                     this.next = entry.getKey();
                     return;
@@ -329,24 +396,24 @@ public class Amphitheater extends DerelictPiece {
         }
     }
 
+    protected class StepBlockSelector extends AmphitheaterBlockSelector {
+        @Override
+        public Map<BlockState, Float> blockMap() {
+            return Amphitheater.this.stepBlockMap;
+        }
+    }
+
     protected class PillarBlockSelector extends AmphitheaterBlockSelector {
         @Override
-        public void next(RandomSource random, int x, int y, int z, boolean bl) {
-            var opt = tryDecay();
-            if (opt.isPresent()) {
-                this.next = opt.get();
-                return;
-            }
+        public Map<BlockState, Float> blockMap() {
+            return Amphitheater.this.pillarBlockMap;
+        }
+    }
 
-            for (var entry : Amphitheater.this.pillarBlockMap.entrySet()) {
-                if (random.nextFloat() < entry.getValue()) {
-                    this.next = entry.getKey();
-                    return;
-                }
-                random.nextFloat();
-            }
-
-            this.next = CAVE_AIR;
+    protected class WallBlockSelector extends AmphitheaterBlockSelector {
+        @Override
+        public Map<BlockState, Float> blockMap() {
+            return Amphitheater.this.wallBlockMap;
         }
     }
 }
