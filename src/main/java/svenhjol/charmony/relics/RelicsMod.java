@@ -9,7 +9,7 @@ import svenhjol.charmony.core.enums.Side;
     id = RelicsMod.ID,
     sides = {Side.Client, Side.Common},
     name = "Charmony Relics",
-    description = "TODO")
+    description = "Rare items with overpowered enchantments hidden in lost locations.")
 public final class RelicsMod extends Mod {
     public static final String ID = "charmony-relics";
     private static RelicsMod instance;

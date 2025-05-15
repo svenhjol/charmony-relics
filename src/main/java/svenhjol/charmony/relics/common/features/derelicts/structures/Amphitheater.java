@@ -302,7 +302,7 @@ public class Amphitheater extends DerelictPiece {
             }
 
             if (box.isInside(pos) && state.isAir() && stateBelow.isSolidRender()) {
-                feature().handlers.createDecoratedPot(level, pos, random, random.nextDouble() < 0.8d ? Tags.RELICS : Tags.DERELICT_POTS);
+                feature().handlers.createDecoratedPot(level, pos, random, random.nextDouble() < 0.07d ? Tags.RELICS : Tags.DERELICT_POTS);
             }
         }
     }

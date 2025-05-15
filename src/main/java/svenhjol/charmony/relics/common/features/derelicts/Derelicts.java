@@ -7,11 +7,19 @@ import svenhjol.charmony.core.base.Mod;
 import svenhjol.charmony.core.base.SidedFeature;
 import svenhjol.charmony.core.enums.Side;
 
-@FeatureDefinition(side = Side.Common)
+@FeatureDefinition(side = Side.Common, description = """
+    Rare structures found at the lowest levels of the world that contain forgotten treasures.""")
 public final class Derelicts extends SidedFeature {
     public final Registers registers;
     public final Handlers handlers;
     public final Providers providers;
+
+    @Configurable(
+        name = "Ancient City loot chance",
+        description = """
+            Chance (out of 1.0) of a derelict map being found in an Ancient City loot chest."""
+    )
+    private static double mapLootChance = 0.2d;
 
     @Configurable(
         name = "Derelict runestone chance",
@@ -22,14 +30,7 @@ public final class Derelicts extends SidedFeature {
             so the likelihood of finding one will appear to be lower than the given value.""",
         requireRestart = false
     )
-    private static double derelictRunestoneChance = 0.08d;
-
-    @Configurable(
-        name = "Ancient City loot chance",
-        description = """
-            Chance (out of 1.0) of a derelict map being found in an Ancient City loot chest."""
-    )
-    private static double mapLootChance = 0.2d;
+    private static double runestoneChance = 0.08d;
 
     public Derelicts(Mod mod) {
         super(mod);
@@ -42,8 +43,8 @@ public final class Derelicts extends SidedFeature {
         return Mod.getSidedFeature(Derelicts.class);
     }
 
-    public double derelictRunestoneChance() {
-        return Mth.clamp(derelictRunestoneChance, 0.0d, 1.0d);
+    public double runestoneChance() {
+        return Mth.clamp(runestoneChance, 0.0d, 1.0d);
     }
 
     public double mapLootChance() {

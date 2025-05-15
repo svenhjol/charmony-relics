@@ -6,7 +6,9 @@ import svenhjol.charmony.core.base.Mod;
 import svenhjol.charmony.core.base.SidedFeature;
 import svenhjol.charmony.core.enums.Side;
 
-@FeatureDefinition(side = Side.Common)
+@FeatureDefinition(side = Side.Common, description = """
+    Adds books and items enchanted with levels higher than the enchantment maximum
+    or enchantments that can not normally be combined.""")
 public final class Relics extends SidedFeature {
     public final Registers registers;
     public final Providers providers;

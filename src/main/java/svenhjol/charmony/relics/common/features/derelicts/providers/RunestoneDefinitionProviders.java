@@ -40,7 +40,7 @@ public class RunestoneDefinitionProviders implements RunestoneDefinitionProvider
 
             @Override
             public Optional<RunestoneLocation> location(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
-                if (feature().enabled() && random.nextDouble() < feature().derelictRunestoneChance()) {
+                if (feature().enabled() && random.nextDouble() < feature().runestoneChance()) {
                     return Optional.of(new RunestoneLocation(RunestoneLocation.Type.Structure, RelicsMod.id("derelict")));
                 }
                 return Optional.empty();

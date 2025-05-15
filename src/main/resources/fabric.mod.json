@@ -3,8 +3,8 @@
   "id": "charmony-relics",
   "version": "${mod_version}",
 
-  "name": "Relics",
-  "description": "Relics.",
+  "name": "Charmony Relics",
+  "description": "Rare items with overpowered enchantments hidden in lost locations.",
   "authors": [
     "svenhjol"
   ],
