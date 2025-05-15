@@ -26,7 +26,7 @@ public final class Relics extends SidedFeature {
         description = """
             The cost (in XP) of each level above the enchantment's maximum when applying on the anvil."""
     )
-    private static int anvilCostPerLevel;
+    private static int anvilCostPerLevel = 3;
 
     @Configurable(
         name = "Maximum anvil cost",
