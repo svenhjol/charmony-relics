@@ -24,13 +24,29 @@ public final class Derelicts extends SidedFeature {
     @Configurable(
         name = "Derelict runestone chance",
         description = """
-            Chance (out of 1.0) of a runestone linking to a derelict.
+            Chance (out of 1.0) of a runestone linking to a derelict structure.
             This only works if the Charmony Runestones mod is present and enabled.
             The runestone will be tested after processing other registered runestones in a series,
             so the likelihood of finding one will appear to be lower than the given value.""",
         requireRestart = false
     )
     private static double runestoneChance = 0.08d;
+
+    @Configurable(
+        name = "Decorated pot relic loot chance",
+        description = """
+            Chance (out of 1.0) of finding a relic inside a decorated pot within a derelict structure.""",
+        requireRestart = false
+    )
+    private static double potChance = 0.07d;
+
+    @Configurable(
+        name = "Suspicious gravel relic loot chance",
+        description = """
+            Chance (out of 1.0) of finding a relic inside suspicious gravel within a derelict structure.""",
+        requireRestart = false
+    )
+    private static double brushableChance = 0.18d;
 
     public Derelicts(Mod mod) {
         super(mod);
@@ -49,5 +65,13 @@ public final class Derelicts extends SidedFeature {
 
     public double mapLootChance() {
         return Mth.clamp(mapLootChance, 0.0d, 1.0d);
+    }
+
+    public double potChance() {
+        return Mth.clamp(potChance, 0.0d, 1.0d);
+    }
+
+    public double brushableChance() {
+        return Mth.clamp(brushableChance, 0.0d, 1.0d);
     }
 }

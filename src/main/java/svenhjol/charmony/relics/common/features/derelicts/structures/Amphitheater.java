@@ -281,7 +281,7 @@ public class Amphitheater extends DerelictPiece {
             if (box.isInside(pos) && level.getBlockState(pos.below()).isSolidRender()) {
                 level.setBlock(pos, Blocks.SUSPICIOUS_GRAVEL.defaultBlockState(), 2);
                 if (level.getBlockEntity(pos) instanceof BrushableBlockEntity brushable) {
-                    var loot = random.nextDouble() < 0.18d ? Tags.RELICS : Tags.DERELICT_ARCHAEOLOGY;
+                    var loot = random.nextDouble() < feature().brushableChance() ? Tags.RELICS : Tags.DERELICT_ARCHAEOLOGY;
                     brushable.setLootTable(loot, random.nextLong());
                 }
             }
@@ -302,7 +302,7 @@ public class Amphitheater extends DerelictPiece {
             }
 
             if (box.isInside(pos) && state.isAir() && stateBelow.isSolidRender()) {
-                feature().handlers.createDecoratedPot(level, pos, random, random.nextDouble() < 0.07d ? Tags.RELICS : Tags.DERELICT_POTS);
+                feature().handlers.createDecoratedPot(level, pos, random, random.nextDouble() < feature().potChance() ? Tags.RELICS : Tags.DERELICT_POTS);
             }
         }
     }
