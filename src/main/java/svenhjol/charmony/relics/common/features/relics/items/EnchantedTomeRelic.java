@@ -20,8 +20,8 @@ import java.util.List;
 
 /**
  * An enchanted book that holds levels above the maximum enchantment levels.
- * If the glint colors mod is present then they also have a random enchantment color.
- * Use an anvil to apply these enchantments (and the glint color) to an item.
+ * If the glint colors mod is present then they also have a random enchantment type.
+ * Use an anvil to apply these enchantments (and the glint type) to an item.
  */
 public class EnchantedTomeRelic implements RelicDefinition {
     @Override

@@ -38,7 +38,7 @@ public interface RelicDefinition extends StringRepresentable {
     RelicType type();
 
     /**
-     * Rarity to apply to the relic. This affects the color of the item tooltip.
+     * Rarity to apply to the relic. This affects the type of the item tooltip.
      */
     Rarity rarity();
 

@@ -4,15 +4,12 @@ import net.minecraft.Util;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
 import svenhjol.charmony.api.glint_colors.GlintColorsApi;
 import svenhjol.charmony.api.relics.RelicDefinition;
-import svenhjol.charmony.api.relics.RelicsApi;
 import svenhjol.charmony.core.base.Setup;
 
 import java.util.ArrayList;
@@ -102,7 +99,7 @@ public class Handlers extends Setup<Relics> {
         // We use minecraft's API to do this because it handles both items and books.
         EnchantmentHelper.setEnchantments(item, itemEnchantments.toImmutable());
 
-        // Apply enchantment glint color to the item, if applicable.
+        // Apply enchantment glint type to the item, if applicable.
         var color = definition.glintColor(random);
         GlintColorsApi.instance().apply(item, color);
 
@@ -113,10 +110,9 @@ public class Handlers extends Setup<Relics> {
         // Apply lore to the item, if applicable.
         definition.lore().ifPresent(lore -> item.set(DataComponents.LORE, lore));
 
-        // Apply the "relic" tag to this item.
-        var tag = new CompoundTag();
-        tag.putBoolean(RelicsApi.RELIC_TAG, true);
-        item.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
+        // Apply relic data.
+        var data = new RelicData(definition.type());
+        RelicData.set(item, data);
 
         return item;
     }

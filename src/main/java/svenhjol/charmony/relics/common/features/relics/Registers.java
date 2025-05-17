@@ -1,6 +1,7 @@
 package svenhjol.charmony.relics.common.features.relics;
 
 import net.minecraft.Util;
+import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.item.ItemStack;
 import svenhjol.charmony.api.relics.RelicDefinition;
 import svenhjol.charmony.api.relics.RelicDefinitionProvider;
@@ -8,18 +9,28 @@ import svenhjol.charmony.api.relics.RelicType;
 import svenhjol.charmony.api.relics.RelicsApi;
 import svenhjol.charmony.core.Api;
 import svenhjol.charmony.core.base.Setup;
+import svenhjol.charmony.core.common.CommonRegistry;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Supplier;
 
 public class Registers extends Setup<Relics> {
+    public final Supplier<DataComponentType<RelicData>> data;
     public final Map<String, RelicDefinition> relicDefinitions = new HashMap<>();
     public final Map<RelicType, List<RelicDefinition>> relicsByType = new HashMap<>();
 
     public Registers(Relics feature) {
         super(feature);
+
+        var registry = CommonRegistry.forFeature(feature);
+
+        data = registry.dataComponent("relic",
+            () -> builder -> builder
+                .persistent(RelicData.CODEC)
+                .networkSynchronized(RelicData.STREAM_CODEC));
 
         Api.consume(RelicDefinitionProvider.class, provider -> {
             relicsByType.clear();
