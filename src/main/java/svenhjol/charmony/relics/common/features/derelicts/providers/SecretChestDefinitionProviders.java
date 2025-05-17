@@ -40,7 +40,7 @@ public class SecretChestDefinitionProviders implements SecretChestDefinitionProv
         }
 
         @Override
-        public List<String> lockMenus() {
+        public List<String> puzzleMenus() {
             return List.of(
                 "moon_puzzle",
                 "clock_puzzle"
