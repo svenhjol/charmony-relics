@@ -4,7 +4,9 @@ import net.minecraft.Util;
 import net.minecraft.core.HolderGetter;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
@@ -115,5 +117,24 @@ public class Handlers extends Setup<Relics> {
         RelicData.set(item, data);
 
         return item;
+    }
+
+    public boolean hasRelicInInventory(Player player) {
+        var inventory = player.getInventory();
+        for (var item : inventory) {
+            if (RelicData.has(item)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void playerTick(Player player) {
+        var level = player.level();
+        if (level instanceof ServerLevel serverLevel
+            && serverLevel.getGameTime() % 20 == 0
+            && hasRelicInInventory(player)) {
+            feature().advancements.obtainedRelic(player);
+        }
     }
 }

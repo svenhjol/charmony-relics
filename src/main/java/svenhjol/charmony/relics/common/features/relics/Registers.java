@@ -3,6 +3,7 @@ package svenhjol.charmony.relics.common.features.relics;
 import net.minecraft.Util;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.item.ItemStack;
+import svenhjol.charmony.api.events.PlayerTickCallback;
 import svenhjol.charmony.api.relics.RelicDefinition;
 import svenhjol.charmony.api.relics.RelicDefinitionProvider;
 import svenhjol.charmony.api.relics.RelicType;
@@ -70,6 +71,8 @@ public class Registers extends Setup<Relics> {
                 var definition = definitions.getFirst();
                 return feature().handlers.createRelicItem(definition, registry, random);
             });
+
+            PlayerTickCallback.EVENT.register(feature().handlers::playerTick);
         };
     }
 }

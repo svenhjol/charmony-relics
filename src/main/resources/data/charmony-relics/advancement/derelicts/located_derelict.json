@@ -1,0 +1,41 @@
+{
+  "parent": "charmony-relics:root",
+  "display": {
+    "title": {
+      "translate": "advancements.charmony-relics.located_derelict.title"
+    },
+    "description": {
+      "translate": "advancements.charmony-relics.located_derelict.description"
+    },
+    "icon": {
+      "id": "minecraft:cracked_deepslate_tiles"
+    }
+  },
+  "frame": "goal",
+  "show_toast": true,
+  "announce_to_chat": true,
+  "hidden": false,
+  "criteria": {
+    "at_derelict": {
+      "conditions": {
+        "player": [
+          {
+            "condition": "minecraft:entity_properties",
+            "entity": "this",
+            "predicate": {
+              "location": {
+                "structures": "#charmony-relics:derelict"
+              }
+            }
+          }
+        ]
+      },
+      "trigger": "minecraft:location"
+    }
+  },
+  "requirements": [
+    [
+      "at_derelict"
+    ]
+  ]
+}
