@@ -27,4 +27,7 @@ public final class Tags {
 
     public static final TagKey<Structure> ON_DERELICT_MAPS = TagKey.create(Registries.STRUCTURE,
         RelicsMod.id("on_derelict_maps"));
+
+    public static final TagKey<Structure> RUNESTONE_LOCATED = TagKey.create(Registries.STRUCTURE,
+        RelicsMod.id("runestone_located"));
 }

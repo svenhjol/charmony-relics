@@ -14,5 +14,6 @@
   "item.charmony-relics.arcane_axe": "Arcane Axe",
   "item.charmony-relics.arcane_crossbow": "Arcane Crossbow",
   "item.charmony-relics.arcane_chestplate": "Arcane Chestplate",
-  "filled_map.charmony-relics.derelict": "Derelict"
+  "filled_map.charmony-relics.derelict": "Derelict",
+  "structure.charmony-relics.derelict_amphitheater": "Derelict Amphitheater"
 }

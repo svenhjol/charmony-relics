@@ -13,5 +13,7 @@ apply from: buildFile.exists() ? buildFile : buildUrl
 dependencies {
     copyMod "charmony-glint-colors", "glint_colors"
     copyMod "charmony-tweaks", "tweaks"
+    copyMod "charmony-rune-dictionary", "rune_dictionary"
+    copyMod "charmony-runestones", "runestones"
     copyMod "charmony-stone-chests", "stone_chests"
 }
