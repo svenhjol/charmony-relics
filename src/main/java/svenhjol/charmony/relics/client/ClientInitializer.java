@@ -1,7 +1,7 @@
 package svenhjol.charmony.relics.client;
 
 import net.fabricmc.api.ClientModInitializer;
-import svenhjol.charmony.core.enums.Side;
+import svenhjol.charmony.api.core.Side;
 import svenhjol.charmony.relics.RelicsMod;
 
 public final class ClientInitializer implements ClientModInitializer {
