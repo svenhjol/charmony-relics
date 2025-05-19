@@ -23,6 +23,9 @@
     ],
     "client": [
       "svenhjol.charmony.relics.client.ClientInitializer"
+    ],
+    "modmenu": [
+      "svenhjol.charmony.relics.integration.ModMenuPlugin"
     ]
   },
 
