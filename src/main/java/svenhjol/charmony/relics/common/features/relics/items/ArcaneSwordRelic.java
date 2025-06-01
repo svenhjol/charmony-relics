@@ -26,7 +26,7 @@ public class ArcaneSwordRelic implements RelicDefinition {
 
     @Override
     public MutableComponent name(RandomSource random) {
-        return Component.translatable("item.charmony-relics.arcane_sword");
+        return Component.translatable("item.charmony.arcane_sword");
     }
 
     @Override

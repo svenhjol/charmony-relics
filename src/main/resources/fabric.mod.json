@@ -8,7 +8,7 @@
   "authors": [
     "svenhjol"
   ],
-  "icon": "assets/charmony-relics/textures/gui/sprites/icon.png",
+  "icon": "assets/charmony/textures/gui/sprites/charmony-relics.png",
   "license": "MIT",
   "environment": "*",
   "mixins": [
@@ -23,9 +23,6 @@
     ],
     "client": [
       "svenhjol.charmony.relics.client.ClientInitializer"
-    ],
-    "modmenu": [
-      "svenhjol.charmony.relics.integration.ModMenuPlugin"
     ]
   },
 

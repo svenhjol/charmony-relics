@@ -54,7 +54,7 @@ public class RunestoneDefinitionProviders implements RunestoneDefinitionProvider
             }
 
             @Override
-            public Supplier<ItemLike> sacrifice(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
+            public Supplier<ItemLike> item(LevelAccessor level, BlockPos pos, RandomSource random, double quality) {
                 return () -> ItemStackHelper.randomItem(level, random, Tags.DERELICT_RUNESTONE, Items.DIAMOND);
             }
         };

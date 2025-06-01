@@ -1,0 +1,19 @@
+{
+  "advancements.charmony.relics.title": "Relics",
+  "advancements.charmony.relics.description": "Ancient items with unusual enchantments",
+  "advancements.charmony.obtained_relic.title": "Relic Hunter",
+  "advancements.charmony.obtained_relic.description": "Find a lost Relic",
+  "advancements.charmony.located_derelict.title": "Extreme Archaeology",
+  "advancements.charmony.located_derelict.description": "Find a Derelict",
+  "enchantment.level.11": "XI",
+  "gui.charmony.prefixes": "Alluring,Ancient,Antique,Archaic,Astonishing,Attractive,Beautiful,Burnished,Charmed,Charming,Curious,Decorated,Distinctive,Durable,Dusty,Elaborate,Embellished,Enchanted,Engraved,Exceptional,Exotic,Extraordinary,Fabled,Famed,Fancy,Fantastical,Fascinating,Fetching,Forgotten,Gilded,Gleaming,Glinting,Glistening,Glowing,Incredible,Interesting,Intriguing,Iridescent,Jagged,Jewelled,Legendary,Light,Lost,Magical,Marvellous,Mysterious,Mystic,Mystical,Mythic,Mythical,Obscure,Prized,Polished,Precious,Radiant,Rare,Remarkable,Runic,Secret,Shiny,Sparkling,Special,Strange,Superior,Suspicious,Unique,Unusual,Valuable,Vibrant,Wonderful,Wonderous",
+  "gui.charmony.prefixed_item_name": "%s %s",
+  "item.charmony.arcane_bow": "Arcane Bow",
+  "item.charmony.enchanted_tome": "Enchanted Tome",
+  "item.charmony.arcane_sword": "Arcane Sword",
+  "item.charmony.arcane_axe": "Arcane Axe",
+  "item.charmony.arcane_crossbow": "Arcane Crossbow",
+  "item.charmony.arcane_chestplate": "Arcane Chestplate",
+  "filled_map.charmony.derelict": "Derelict",
+  "structure.charmony.derelict_amphitheater": "Derelict Amphitheater"
+}

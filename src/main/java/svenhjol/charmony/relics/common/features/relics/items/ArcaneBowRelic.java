@@ -26,7 +26,7 @@ public class ArcaneBowRelic implements RelicDefinition {
 
     @Override
     public MutableComponent name(RandomSource random) {
-        return Component.translatable("item.charmony-relics.arcane_bow");
+        return Component.translatable("item.charmony.arcane_bow");
     }
 
     @Override

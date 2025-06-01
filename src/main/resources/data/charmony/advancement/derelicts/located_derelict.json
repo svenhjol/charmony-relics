@@ -1,11 +1,11 @@
 {
-  "parent": "charmony-relics:root",
+  "parent": "charmony:root",
   "display": {
     "title": {
-      "translate": "advancements.charmony-relics.located_derelict.title"
+      "translate": "advancements.charmony.located_derelict.title"
     },
     "description": {
-      "translate": "advancements.charmony-relics.located_derelict.description"
+      "translate": "advancements.charmony.located_derelict.description"
     },
     "icon": {
       "id": "minecraft:cracked_deepslate_tiles"
@@ -24,7 +24,7 @@
             "entity": "this",
             "predicate": {
               "location": {
-                "structures": "#charmony-relics:derelict"
+                "structures": "#charmony:derelict"
               }
             }
           }

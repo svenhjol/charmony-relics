@@ -31,7 +31,7 @@ public class EnchantedTomeRelic implements RelicDefinition {
 
     @Override
     public MutableComponent name(RandomSource random) {
-        return Component.translatable("item.charmony-relics.enchanted_tome");
+        return Component.translatable("item.charmony.enchanted_tome");
     }
 
     @Override

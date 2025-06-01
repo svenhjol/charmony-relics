@@ -26,7 +26,7 @@ public class ArcaneCrossbowRelic implements RelicDefinition {
 
     @Override
     public MutableComponent name(RandomSource random) {
-        return Component.translatable("item.charmony-relics.arcane_crossbow");
+        return Component.translatable("item.charmony.arcane_crossbow");
     }
 
     @Override

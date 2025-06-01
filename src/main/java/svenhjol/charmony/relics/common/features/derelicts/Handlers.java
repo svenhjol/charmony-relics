@@ -108,7 +108,7 @@ public class Handlers extends Setup<Derelicts> {
             var map = MapItem.create(serverLevel, target.getX(), target.getZ(), (byte)2, true, true);
             MapItem.renderBiomePreviewMap(serverLevel, map);
             MapItemSavedData.addTargetDecoration(map, target, "+", MapDecorationTypes.TARGET_X);
-            map.set(DataComponents.ITEM_NAME, Component.translatable("filled_map.charmony-relics.derelict"));
+            map.set(DataComponents.ITEM_NAME, Component.translatable("filled_map.charmony.derelict"));
             return Optional.of(map);
         }
         return Optional.empty();

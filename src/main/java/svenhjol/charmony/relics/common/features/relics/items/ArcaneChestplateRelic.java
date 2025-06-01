@@ -26,7 +26,7 @@ public class ArcaneChestplateRelic implements RelicDefinition {
 
     @Override
     public MutableComponent name(RandomSource random) {
-        return Component.translatable("item.charmony-relics.arcane_chestplate");
+        return Component.translatable("item.charmony.arcane_chestplate");
     }
 
     @Override
