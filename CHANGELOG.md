@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.1
+
+- Fix invalid loot table ref.
+
 ## 1.4.0
 
 - Transfer elixirs to the Brew and Stew mod.
