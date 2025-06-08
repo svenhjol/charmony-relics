@@ -7,7 +7,9 @@ import svenhjol.charmony.api.core.Side;
 import svenhjol.charmony.core.base.Mod;
 import svenhjol.charmony.core.base.SidedFeature;
 
-@FeatureDefinition(side = Side.Common, description = "TODO")
+@FeatureDefinition(side = Side.Common, description = """
+    Adds potions with effects that last longer and have much higher potency
+    than can normally be brewed.""")
 @SuppressWarnings({"FieldMayBeFinal", "FieldCanBeLocal"})
 public final class Elixirs extends SidedFeature {
     public final Registers registers;
