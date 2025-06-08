@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.0
+
+- Separate out derelicts and relics reponsibilities.
+- Relics now have a small chance to get added to stronghold libraries and trial chambers vaults.
+- Port Elixirs code.
+
 ## 1.2.0
 
 - Update for 1.21.6.
