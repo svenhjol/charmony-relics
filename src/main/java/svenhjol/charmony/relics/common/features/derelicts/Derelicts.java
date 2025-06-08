@@ -16,7 +16,7 @@ public final class Derelicts extends SidedFeature {
     public final Providers providers;
 
     @Configurable(
-        name = "Ancient City loot chance",
+        name = "Ancient City derelict map chance",
         description = """
             Chance (out of 1.0) of a derelict map being found in an Ancient City loot chest."""
     )
@@ -32,6 +32,14 @@ public final class Derelicts extends SidedFeature {
         requireRestart = false
     )
     private static double runestoneChance = 0.08d;
+
+    @Configurable(
+        name = "Derelict books chest chance",
+        description = """
+            Chance (out of 1.0) of finding an enchanted tome relic inside a 'derelict books' stone chest.
+            This chest is only added to a derelict if the Charmony Stone Chests mod is present."""
+    )
+    private static double booksChestChance = 1.0d;
 
     @Configurable(
         name = "Decorated pot relic loot chance",
@@ -70,6 +78,10 @@ public final class Derelicts extends SidedFeature {
 
     public double potChance() {
         return Mth.clamp(potChance, 0.0d, 1.0d);
+    }
+
+    public double booksChestChance() {
+        return Mth.clamp(booksChestChance, 0.0d, 1.0d);
     }
 
     public double brushableChance() {

@@ -1,5 +1,6 @@
 package svenhjol.charmony.relics.common.features.relics;
 
+import net.minecraft.util.Mth;
 import svenhjol.charmony.api.core.Configurable;
 import svenhjol.charmony.api.core.FeatureDefinition;
 import svenhjol.charmony.core.base.Mod;
@@ -43,6 +44,20 @@ public final class Relics extends SidedFeature {
     )
     private static int maxAnvilCost = 39;
 
+    @Configurable(
+        name = "Stronghold library chest chance",
+        description = """
+            Chance (out of 1.0) of finding an enchanted tome relic inside a 'stronghold library' chest."""
+    )
+    private static double strongholdLibraryChance = 0.18d;
+
+    @Configurable(
+        name = "Trial Chambers ominous vault chance",
+        description = """
+            Chance (out of 1.0) of a relic being provided by a Trial Chambers ominous vault."""
+    )
+    private static double trialChambersChance = 0.18d;
+
     public Relics(Mod mod) {
         super(mod);
         registers = new Registers(this);
@@ -65,5 +80,13 @@ public final class Relics extends SidedFeature {
 
     public int anvilCostPerLevel() {
         return anvilCostPerLevel;
+    }
+
+    public double strongholdLibraryChance() {
+        return Mth.clamp(strongholdLibraryChance, 0.0d, 1.0d);
+    }
+
+    public double trialChambersChance() {
+        return Mth.clamp(trialChambersChance, 0.0d, 1.0d);
     }
 }

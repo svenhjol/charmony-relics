@@ -30,8 +30,7 @@ import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.core.helpers.TagHelper;
 import svenhjol.charmony.relics.common.features.derelicts.loot_functions.DerelictMapFunction;
-import svenhjol.charmony.relics.common.features.derelicts.loot_functions.BookLootFunction;
-import svenhjol.charmony.relics.common.features.derelicts.loot_functions.RelicLootFunction;
+import svenhjol.charmony.relics.common.features.relics.Relics;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,26 +44,9 @@ public class Handlers extends Setup<Derelicts> {
     public void handleLootTableModify(ResourceKey<LootTable> key, LootTable.Builder builder, LootTableSource source, HolderLookup.Provider provider) {
         if (!source.isBuiltin()) return;
 
-        // Add enchanted tomes to secret chests.
-        if (key == Tags.BOOKS_CHEST) {
-            var pool = LootPool.lootPool()
-                .setRolls(ConstantValue.exactly(1))
-                .add(LootItem.lootTableItem(Items.BOOK)
-                    .setWeight(1)
-                    .apply(() -> new BookLootFunction(List.of())));
-
-            builder.pool(pool.build());
-        }
-
-        // Add any type of relic to the empty relics loot table.
-        if (key == Tags.RELICS) {
-            var pool = LootPool.lootPool()
-                .setRolls(ConstantValue.exactly(1))
-                .add(LootItem.lootTableItem(Items.DIAMOND)
-                    .setWeight(1)
-                    .apply(() -> new RelicLootFunction(List.of())));
-
-            builder.pool(pool.build());
+        // Add enchanted tomes to derelict books chests.
+        if (key == Tags.DERELICT_BOOKS_CHEST) {
+            Relics.feature().handlers.addBookToLootWithChance(builder, feature().booksChestChance());
         }
 
         // Add derelict maps to ancient city loot.

@@ -1,8 +1,10 @@
 package svenhjol.charmony.relics.common.features.relics;
 
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.level.storage.loot.LootTable;
 import svenhjol.charmony.core.Charmony;
 
 public final class Tags {
@@ -47,4 +49,8 @@ public final class Tags {
 
     public static final TagKey<Enchantment> ON_TRIDENT = TagKey.create(Registries.ENCHANTMENT,
         Charmony.id("on_trident"));
+
+    // This loot table intentionally has no pools. A dynamic pool is added at runtime.
+    public static final ResourceKey<LootTable> RELICS = ResourceKey.create(Registries.LOOT_TABLE,
+        Charmony.id("gameplay/relics"));
 }

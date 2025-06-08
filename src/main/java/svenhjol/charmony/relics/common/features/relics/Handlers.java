@@ -1,24 +1,56 @@
 package svenhjol.charmony.relics.common.features.relics;
 
+import net.fabricmc.fabric.api.loot.v3.LootTableSource;
 import net.minecraft.Util;
 import net.minecraft.core.HolderGetter;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.minecraft.world.level.storage.loot.BuiltInLootTables;
+import net.minecraft.world.level.storage.loot.LootPool;
+import net.minecraft.world.level.storage.loot.LootTable;
+import net.minecraft.world.level.storage.loot.entries.LootItem;
+import net.minecraft.world.level.storage.loot.predicates.LootItemRandomChanceCondition;
+import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import svenhjol.charmony.api.glint_colors.GlintColorsApi;
 import svenhjol.charmony.api.relics.RelicDefinition;
 import svenhjol.charmony.core.base.Setup;
+import svenhjol.charmony.relics.common.features.relics.loot_functions.BookLootFunction;
+import svenhjol.charmony.relics.common.features.relics.loot_functions.RelicLootFunction;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Handlers extends Setup<Relics> {
     public Handlers(Relics feature) {
         super(feature);
+    }
+
+    public void handleLootTableModify(ResourceKey<LootTable> key, LootTable.Builder builder, LootTableSource source, HolderLookup.Provider provider) {
+        if (!source.isBuiltin()) return;
+
+        // Add enchanted tomes to stronghold libraries.
+        if (key == BuiltInLootTables.STRONGHOLD_LIBRARY) {
+            addBookToLootWithChance(builder, feature().strongholdLibraryChance());
+        }
+
+        // Add any type of relic to the ancient city loot table.
+        if (key == BuiltInLootTables.TRIAL_CHAMBERS_REWARD_OMINOUS) {
+            addItemToLootWithChance(builder, feature().trialChambersChance());
+        }
+
+        // Add any type of relic to the empty relics loot table.
+        if (key == Tags.RELICS) {
+            addItemToLootWithChance(builder, 1.0d);
+        }
     }
 
     public int transferRelicEnchantments(ItemStack input, ItemStack output, ItemEnchantments enchantments, int cost) {
@@ -136,5 +168,27 @@ public class Handlers extends Setup<Relics> {
             && hasRelicInInventory(player)) {
             feature().advancements.obtainedRelic(player);
         }
+    }
+
+    public void addItemToLootWithChance(LootTable.Builder builder, double chance) {
+        var pool = LootPool.lootPool()
+            .setRolls(ConstantValue.exactly(1))
+            .when(LootItemRandomChanceCondition.randomChance((float)chance))
+            .add(LootItem.lootTableItem(Items.DIAMOND)
+                .setWeight(1)
+                .apply(() -> new RelicLootFunction(List.of())));
+
+        builder.pool(pool.build());
+    }
+
+    public void addBookToLootWithChance(LootTable.Builder builder, double chance) {
+        var pool = LootPool.lootPool()
+            .setRolls(ConstantValue.exactly(1))
+            .when(LootItemRandomChanceCondition.randomChance((float)chance))
+            .add(LootItem.lootTableItem(Items.BOOK)
+                .setWeight(1)
+                .apply(() -> new BookLootFunction(List.of())));
+
+        builder.pool(pool.build());
     }
 }

@@ -30,7 +30,7 @@ public class SecretChestDefinitionProviders implements SecretChestDefinitionProv
         @Override
         public List<ResourceKey<LootTable>> lootTables() {
             return List.of(
-                Tags.BOOKS_CHEST
+                Tags.DERELICT_BOOKS_CHEST
             );
         }
 

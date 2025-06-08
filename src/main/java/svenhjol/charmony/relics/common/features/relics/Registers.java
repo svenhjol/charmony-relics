@@ -1,8 +1,11 @@
 package svenhjol.charmony.relics.common.features.relics;
 
+import net.fabricmc.fabric.api.loot.v3.LootTableEvents;
 import net.minecraft.Util;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.storage.loot.functions.LootItemConditionalFunction;
+import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import svenhjol.charmony.api.events.PlayerTickCallback;
 import svenhjol.charmony.api.relics.RelicDefinition;
 import svenhjol.charmony.api.relics.RelicDefinitionProvider;
@@ -11,6 +14,7 @@ import svenhjol.charmony.api.relics.RelicsApi;
 import svenhjol.charmony.core.Api;
 import svenhjol.charmony.core.base.Setup;
 import svenhjol.charmony.core.common.CommonRegistry;
+import svenhjol.charmony.relics.common.features.relics.loot_functions.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,6 +26,7 @@ public class Registers extends Setup<Relics> {
     public final Supplier<DataComponentType<RelicData>> data;
     public final Map<String, RelicDefinition> relicDefinitions = new HashMap<>();
     public final Map<RelicType, List<RelicDefinition>> relicsByType = new HashMap<>();
+    public final Map<String, Supplier<LootItemFunctionType<? extends LootItemConditionalFunction>>> lootFunctions = new HashMap<>();
 
     public Registers(Relics feature) {
         super(feature);
@@ -32,6 +37,22 @@ public class Registers extends Setup<Relics> {
             () -> builder -> builder
                 .persistent(RelicData.CODEC)
                 .networkSynchronized(RelicData.STREAM_CODEC));
+
+        // Loot functions for adding relics to loot tables.
+        lootFunctions.put(Constants.RELIC_LOOT, registry.lootFunctionType(Constants.RELIC_LOOT,
+            () -> new LootItemFunctionType<>(RelicLootFunction.CODEC)));
+
+        lootFunctions.put(Constants.WEAPON_LOOT, registry.lootFunctionType(Constants.WEAPON_LOOT,
+            () -> new LootItemFunctionType<>(WeaponLootFunction.CODEC)));
+
+        lootFunctions.put(Constants.TOOL_LOOT, registry.lootFunctionType(Constants.TOOL_LOOT,
+            () -> new LootItemFunctionType<>(ToolLootFunction.CODEC)));
+
+        lootFunctions.put(Constants.ARMOR_LOOT, registry.lootFunctionType(Constants.ARMOR_LOOT,
+            () -> new LootItemFunctionType<>(ArmorLootFunction.CODEC)));
+
+        lootFunctions.put(Constants.BOOK_LOOT, registry.lootFunctionType(Constants.BOOK_LOOT,
+            () -> new LootItemFunctionType<>(BookLootFunction.CODEC)));
 
         Api.consume(RelicDefinitionProvider.class, provider -> {
             relicsByType.clear();
@@ -73,6 +94,7 @@ public class Registers extends Setup<Relics> {
             });
 
             PlayerTickCallback.EVENT.register(feature().handlers::playerTick);
+            LootTableEvents.MODIFY.register(feature().handlers::handleLootTableModify);
         };
     }
 }

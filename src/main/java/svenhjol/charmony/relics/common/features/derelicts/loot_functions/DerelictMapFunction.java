@@ -10,7 +10,6 @@ import net.minecraft.world.level.storage.loot.functions.LootItemFunctionType;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
 import svenhjol.charmony.core.helpers.WorldHelper;
-import svenhjol.charmony.relics.common.features.derelicts.Constants;
 import svenhjol.charmony.relics.common.features.derelicts.Derelicts;
 
 import java.util.List;
@@ -26,7 +25,7 @@ public class DerelictMapFunction extends LootItemConditionalFunction {
 
     @Override
     public LootItemFunctionType<? extends LootItemConditionalFunction> getType() {
-        return Derelicts.feature().registers.lootFunctions.get(Constants.MAP_LOOT).get();
+        return Derelicts.feature().registers.mapLootFunction.get();
     }
 
     @Override
