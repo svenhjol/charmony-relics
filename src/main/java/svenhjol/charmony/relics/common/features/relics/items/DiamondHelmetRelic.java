@@ -13,7 +13,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import svenhjol.charmony.api.relics.RelicDefinition;
 import svenhjol.charmony.api.relics.RelicType;
 import svenhjol.charmony.core.helpers.TagHelper;
-import svenhjol.charmony.relics.common.features.relics.Helpers;
+import svenhjol.charmony.relics.common.features.relics.Relics;
 import svenhjol.charmony.relics.common.features.relics.Tags;
 
 import java.util.List;
@@ -26,7 +26,7 @@ public class DiamondHelmetRelic implements RelicDefinition {
 
     @Override
     public MutableComponent name(RandomSource random) {
-        return Helpers.prefixedItemName(Component.translatable("item.minecraft.diamond_helmet"), random);
+        return Relics.feature().handlers.prefixedRelicName(Component.translatable("item.minecraft.diamond_helmet"), random);
     }
 
     @Override

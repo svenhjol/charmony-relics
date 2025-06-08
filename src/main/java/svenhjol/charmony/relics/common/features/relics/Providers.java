@@ -22,6 +22,8 @@ public class Providers extends Setup<Relics> implements RelicDefinitionProvider 
             new ArcaneChestplateRelic(),
             new ArcaneCrossbowRelic(),
             new ArcaneSwordRelic(),
+            new BowRelic(),
+            new CrossbowRelic(),
             new DiamondAxeRelic(),
             new DiamondBootsRelic(),
             new DiamondChestplateRelic(),

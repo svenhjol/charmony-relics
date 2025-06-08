@@ -6,6 +6,8 @@ import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -27,6 +29,7 @@ import svenhjol.charmony.relics.common.features.relics.loot_functions.BookLootFu
 import svenhjol.charmony.relics.common.features.relics.loot_functions.RelicLootFunction;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Handlers extends Setup<Relics> {
@@ -190,5 +193,11 @@ public class Handlers extends Setup<Relics> {
                 .apply(() -> new BookLootFunction(List.of())));
 
         builder.pool(pool.build());
+    }
+
+    public MutableComponent prefixedRelicName(MutableComponent relicName, RandomSource random) {
+        var prefixes = Arrays.stream(Component.translatable("gui.charmony.relic_prefixes").getString().split(",")).toList();
+        var prefix = prefixes.get(random.nextInt(prefixes.size()));
+        return Component.translatable("gui.charmony.prefixed_relic_name", prefix, relicName);
     }
 }

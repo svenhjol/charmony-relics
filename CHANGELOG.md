@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.4.0
+
+- Transfer elixirs to the Brew and Stew mod.
+- Add missing bow and crossbow relics.
+
 ## 1.3.0
 
 - Separate out derelicts and relics reponsibilities.
