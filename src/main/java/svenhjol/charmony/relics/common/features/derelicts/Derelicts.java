@@ -47,7 +47,7 @@ public final class Derelicts extends SidedFeature {
             Chance (out of 1.0) of finding a relic inside a decorated pot within a derelict structure.""",
         requireRestart = false
     )
-    private static double potChance = 0.08d;
+    private static double potChance = 0.1d;
 
     @Configurable(
         name = "Suspicious gravel relic loot chance",
@@ -55,7 +55,7 @@ public final class Derelicts extends SidedFeature {
             Chance (out of 1.0) of finding a relic inside suspicious gravel within a derelict structure.""",
         requireRestart = false
     )
-    private static double brushableChance = 0.19d;
+    private static double brushableChance = 0.2d;
 
     public Derelicts(Mod mod) {
         super(mod);

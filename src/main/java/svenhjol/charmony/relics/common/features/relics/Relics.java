@@ -49,14 +49,14 @@ public final class Relics extends SidedFeature {
         description = """
             Chance (out of 1.0) of finding an enchanted tome relic inside a 'stronghold library' chest."""
     )
-    private static double strongholdLibraryChance = 0.18d;
+    private static double strongholdLibraryChance = 0.25d;
 
     @Configurable(
         name = "Trial Chambers ominous vault chance",
         description = """
             Chance (out of 1.0) of a relic being provided by a Trial Chambers ominous vault."""
     )
-    private static double trialChambersChance = 0.18d;
+    private static double trialChambersChance = 0.33d;
 
     public Relics(Mod mod) {
         super(mod);

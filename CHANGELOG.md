@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.3
+
+- Increase chance of relics appearing in loot.
+
 ## 1.4.2
 
 - Remove curses from enchanted tomes.
