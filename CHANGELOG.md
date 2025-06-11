@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.4.4
+
+- Update API implementation methods.
+
 ## 1.4.3
 
 - Increase chance of relics appearing in loot.

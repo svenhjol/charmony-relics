@@ -67,14 +67,14 @@ public class Registers extends Setup<Relics> {
     public Runnable boot() {
         return () -> {
             // Implementation to get a relic from a given definition ID.
-            RelicsApi.instance().setRelicImpl((id, registry, random) -> {
+            RelicsApi.Impl.relic((id, registry, random) -> {
                 var definition = relicDefinitions.getOrDefault(id, null);
                 if (definition == null) return ItemStack.EMPTY;
                 return feature().handlers.createRelicItem(definition, registry, random);
             });
 
             // Implementation to get a random relic from the available pool.
-            RelicsApi.instance().setRandomRelicImpl((registry, random) -> {
+            RelicsApi.Impl.randomRelic((registry, random) -> {
                 var definitions = new ArrayList<>(relicDefinitions.values());
                 if (definitions.isEmpty()) return ItemStack.EMPTY;
 
@@ -84,7 +84,7 @@ public class Registers extends Setup<Relics> {
             });
 
             // Implementation to get a random relic of a given type.
-            RelicsApi.instance().setRandomRelicOfTypeImpl((registry, random, type) -> {
+            RelicsApi.Impl.randomRelicOfType((registry, random, type) -> {
                 var definitions = new ArrayList<>(relicsByType.get(type));
                 if (definitions.isEmpty()) return ItemStack.EMPTY;
 
